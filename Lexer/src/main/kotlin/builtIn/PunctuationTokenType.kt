@@ -8,6 +8,8 @@ enum class PunctuationTokenType: TokenType {
     Semicolon,
     Colon,
 
+    Underscore,
+
     ParenthesisOpen,
     ParenthesisClose,
     BracketOpen,
@@ -21,6 +23,8 @@ val punctuation: Map<Char, TokenType> = mapOf(
     Pair(',', PunctuationTokenType.Comma),
     Pair(';', PunctuationTokenType.Semicolon),
     Pair(':', PunctuationTokenType.Colon),
+
+    Pair('_', PunctuationTokenType.Underscore),
 
     Pair('(', PunctuationTokenType.ParenthesisOpen),
     Pair(')', PunctuationTokenType.ParenthesisClose),
