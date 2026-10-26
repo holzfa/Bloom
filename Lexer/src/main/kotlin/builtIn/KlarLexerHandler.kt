@@ -13,6 +13,8 @@ object KlarLexerHandler {
     val rules: (lexer: Lexer) -> List<LexerRule> = {
         listOf(
             WhitespaceRule(it),
+            CommentRule(it),
+            OperatorRule(it),
             PunctuationRule(it),
             NumberRule(it),
             StringOrCharRule(it),

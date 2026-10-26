@@ -12,7 +12,7 @@ fun main() {
     val file = File("/home/aengstlicher/Code/Kotlin/Bloom/Cli/src/main/kotlin/test.klr").readText()
     val tokens = lexer.tokenize(file)
 
-    for (token in tokens.filter {t -> t.type == DefaultTokenTypes.Unknown }) {
+    for (token in tokens.filter {t -> t.type != KlarTokenType.Whitespace && t.type != KlarTokenType.Comment }) {
         println(token)
     }
 }
