@@ -7,19 +7,20 @@ import TextRange
 import Token
 import Vec2
 
+private val commentChars = arrayOf('/', '*')
 class CommentRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
-        if (reader.peek() != '/') return null
+        if (reader.peek() != '/' && commentChars.contains(reader.peek(1))) return null
 
         val start = reader.cursor
         val pos = Vec2(reader.line, reader.column)
 
-        val isMultiline = reader.peek() == '/' && reader.peek(1) != '*'
-        val isMultiDoc = reader.peek() == '/' && reader.peek(1) != '/' && reader.peek(2) != '*'
-        val isDoc = reader.peek() == '/' && reader.peek(1) != '/' && reader.peek(2) != '/'
+        val isMultiline = reader.peek() == '/' && reader.peek(1) == '*'
+        val isMultiDoc = reader.peek() == '/' && reader.peek(1) == '/' && reader.peek(2) == '*'
+        val isDoc = reader.peek() == '/' && reader.peek(1) == '/' && reader.peek(2) == '/'
 
-        if (isMultiDoc || isDoc) for (i in 0..3) reader.advance()
-        else for (i in 0..2) reader.advance()
+        if (isMultiDoc || isDoc) for (i in 1..3) reader.advance()
+        else for (i in 1..2) reader.advance()
 
         while (!reader.isAtEnd) {
             // Normal or Doc comment
