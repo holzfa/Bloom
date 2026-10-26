@@ -1,262 +1,230 @@
-module AeroTests.ComplexTest {
-    // Generic trait with multiple methods
-    public trait IComparable<T, TReturn> {
-        fun CompareTo(other: T) -> TReturn
-        fun Equals(other: T) -> Bool
+module Tests
+
+trait Printable {
+    fun toString(): String
+}
+
+struct Vector2<T> : Printable {
+    var x: T
+    var y: T
+
+    impl fun toString() -> String {
+        "Vector"
+    }
+}
+struct IVec2 : Vector2<Int>
+
+class Container<T> {
+    private prop items: Array<T> {
+        get() it
+        set() it = value
     }
 
-    public trait IPrintable {
-        fun ToString() -> String
+    Container(initial: Array<T>) {
+        items = initial
     }
 
-    // Generic struct implementing multiple traits
-    public struct Vector2<T> : IComparable<Vector2<T>, Int>, IPrintable {
-        var X: T
-        var Y: T
-
-        public impl fun CompareTo(other: Vector2<T>) -> Int {
-            0
-        }
-
-        public impl fun Equals(other: Vector2<T>) -> Bool {
-            true
-        }
-
-        public impl fun ToString() -> String {
-            "Vector"
-        }
+    // Method overloading
+    fun get(index: Int) -> T {
+        Items[index]
     }
 
-    public struct IntVec2 : Vector2<Int> {
-        public impl fun CompareTo(other: IntVec2) -> Int {
-            
-        }
-        
-        public impl fun Equals(other: IntVec2) -> Bool {
-            self.X == other.X && self.Y == other.Y
-        }
+    fun get() -> T {
+        Items[0]
     }
 
-    // Generic class with primary constructor and generics
-    public class Container<G> {
-        public Items: G[] {
-            get => it
-            set => it = value
+    // Generic method
+    fun Map<U>(mapper: (item: T) -> U) -> Array<U> {
+        val new: Array<U> = Array(items.length)
+
+        for (i in 0..items.length) {
+            new[i] = mapper(items[i])
         }
 
-        public constructor Container(initial: G[]) {
-            Items = initial
-        }
+        new
+    }
+}
 
-        // Method overloading
-        public fun Get(index: Int) -> G {
-            Items[index]
-        }
-
-        public fun Get() -> G {
-            Items[0]
-        }
-
-        // Generic method
-        public fun Map<U>(transform: (item: G) -> U) -> U[] {
-            []
-        }
+fun Container<Int>.Sum() -> Int {
+    var total: Int = 0
+    for (item in self.Items) {
+        total += item
     }
 
-    // Extension function on generic type
-    public extension fun Container<Int>.Sum() -> Int {
-        var total: Int = 0
-        for (item in self.Items) {
-            total += item
-        }
-        return total
+    total
+}
+
+struct Pair<A, B> {
+    val first: A
+    val second: B
+}
+
+// Class with property accessors
+class Person(age: Int) {
+    prop age: Int {
+        get() it
+        set() it = value
+    }
+}
+
+// Virtual and sealed methods
+class Animal {
+    open fun speak() -> String {
+        "Generic sound"
     }
 
-    // Record with generics
-    public record Pair<A, B> {
-        public val First: A
-        public val Second: B
+    fun move() -> Bool {
+        true
+    }
+}
+
+class Dog : Animal {
+    impl fun Speak() -> String {
+        "Woof"
+    }
+}
+
+// Enum
+enum Result {
+    Success,
+    Failure,
+    Pending
+}
+
+struct Optional<G>(val value: G?, val result: Result) {
+    static fun withValue(value: G) -> Optional<G> {
+        Optional<G>(value, Result.Success)
     }
 
-    // Class with property accessors
-    public class Person(age: Int) {
-        private var _age: Int = age // You can also declare backing properties yourself instead of using the 'it' keyword in a property, but it is discouraged as it is unnecessary and makes the code less readable
-
-        public Age: Int {
-            get => _age
-            set => _age = value
-        }
+    static fun empty() -> Optional<G> {
+        Optional<G>(null, Result.Failure)
     }
 
-    // Virtual and sealed methods
-    public class Animal {
-        public virtual fun Speak() -> String {
-            "Generic sound"
-        }
+    prop isDone: Bool { get() result is Result.Success }
+}
 
-        public fun Move() -> Bool {
-            true
-        }
+
+extensions Int {
+    fun isEven() -> Bool {
+        (self % 2) == 0
     }
 
-    public class Dog : Animal {
-        public impl fun Speak() -> String {
-            "Woof"
-        }
+    fun isOdd() -> Bool {
+        (self % 2) != 0
+    }
+}
+
+
+class Complex {
+    val real: Float
+    val imaginary: Float
+
+    Complex(r: Float, i: Float) {
+        real = r
+        imaginary = i
     }
 
-    // Enum
-    public enum Result {
-        Success,
-        Failure,
-        Pending
+    fun +(other: Complex) -> Complex {
+        Complex(real + other.real, imaginary + other.imaginary)
     }
 
-    public struct Optional<G>(value: G?, result: Result) {
-        public val Value: G? = value
-        public val Result: Result = result
-        
-        public static fun WithValue(value: G) -> Optional<G> {
-            Optional<G>(value, AeroTests.ComplexTest.Result.Success)
-        }
-        
-        public static fun Empty() -> Optional<G> {
-            Optional<G>(null, AeroTests.ComplexTest.Result.Failure)
-        }
-        
-        public IsDone: Bool { get => Result is Result.Success }
+    fun *(scalar: Float) -> Complex {
+        Complex(real * scalar, imaginary * scalar)
+    }
+}
+
+
+fun processResult(result: Result) -> String {
+    match (result) {
+        Result.Success => "Success"
+        Result.Failure => "Failed"
+        Result.Pending => "In progress"
+        else => "Unknown"
+    }
+}
+
+
+fun filter<T>(items: Array<T>, predicate: (item: T) -> Bool) -> T[] {
+    val new = List<T>(items.length)
+
+    for (i in items) {
+        if (predicate(i)) new.add(i)
     }
 
-    // Extensions block
-    public extensions Int {
-        public fun IsEven() -> Bool {
-            (self % 2) == 0
-        }
+    return new
+}
 
-        public fun IsOdd() -> Bool {
-            (self % 2) != 0
-        }
+
+private fun countdown(start: Int) {
+    var counter: Int = start
+    while (counter > 0) {
+        counter -= 1
+    }
+}
+
+
+fun pairOf<X, Y>(first: X, second: Y) -> Pair<X, Y> {
+    Pair<X, Y>(first, second)
+}
+
+
+fun factorial(num: Int) -> Int {
+    var sum: Int = 0
+    for (i in 0..num) {
+        sum += i
     }
 
-    // Operator overloading
-    public class Complex {
-        public val Real: Float
-        public val Imaginary: Float
+    return sum
+}
 
-        public constructor Complex(r: Float, i: Float) {
-            Real = r
-            Imaginary = i
-        }
 
-        public op fun +(other: Complex) -> Complex {
-            Complex(Real + other.Real, Imaginary + other.Imaginary)
-        }
+fun formatPerson(person: Person) -> String {
+    return "Person aged ${person.age}"
+}
 
-        public op fun *(scalar: Float) -> Complex {
-            Complex(Real * scalar, Imaginary * scalar)
-        }
-    }
 
-    // Pattern matching with complex types
-    public fun ProcessResult(result: Result) -> String {
-        match (result) {
-            Result.Success => "Success",
-            Result.Failure => "Failed",
-            Result.Pending => "In progress",
-            else => "Unknown"
-        }
-    }
+fun calculate(a: Int, b: Int) -> Int {
+    a + b
+}
 
-    // Lambda and higher-order functions
-    public fun Filter<T>(items: T[], predicate: (item: T) -> Bool) -> T[] {
-        []
-    }
+fun calculate(a: Int) -> Int {
+    a * 2
+}
 
-    // While loop with state
-    public fun Countdown(start: Int) -> Int {
-        var counter: Int = start
-        while (counter > 0) {
-            counter -= 1
-        }
-        return counter
-    }
 
-    // Nested generics and complex expressions
-    public fun CreatePair<X, Y>(first: X, second: Y) -> Pair<X, Y> {
-        Pair<X, Y>(first, second)
-    }
+fun main(args: Array<String>) -> Int {
+    val vec: Vector2<Int> = Vector2<Int>()
 
-    // Range expressions
-    public fun SumRange(start: Int, end: Int) -> Int {
-        var sum: Int = 0
-        for (i in start..end) {
-            sum += i
-        }
-        return sum
-    }
+    val container: Container<Int> = Container<Int>([1, 2, 3, 4, 5])
+    val sum: Int = container.sum()
 
-    // String interpolation with expressions
-    public fun FormatPerson(person: Person) -> String {
-        val age: Int = person.Age
-        return $"Person aged {age}"
-    }
+    val isEven: Bool = 4.isEven()
+    val isOdd: Bool = 5.isOdd()
 
-    // Method overloading with different arities
-    public fun Calculate(a: Int, b: Int) -> Int {
-        a + b
-    }
+    val c1: Complex = Complex(1.0, 2.0)
+    val c2: Complex = Complex(3.0, 4.0)
+    val c3: Complex = c1 + c2
 
-    public fun Calculate(a: Int) -> Int {
-        a * 2
-    }
+    val resultStatus: String = processResult(Result.Success)
 
-    // Main function exercising all features
-    public fun main(args: String[]) -> Int {
-        // Test generic struct
-        val vec: Vector2<Int> = Vector2<Int>()
+    val dog: Dog = Dog()
+    val sound: String = dog.speak()
 
-        // Test generic class
-        val container: Container<Int> = Container<Int>([1, 2, 3, 4, 5])
-        val sum: Int = container.Sum()
+    val person: Person = Person(25)
+    person.age = 30
+    val formatted: String = formatPerson(person)
 
-        // Test extensions
-        val isEven: Bool = 4.IsEven()
-        val isOdd: Bool = 5.IsOdd()
+    val rangeSum: Int = sumRange(1, 10)
 
-        // Test operator overloading
-        val c1: Complex = Complex(1.0, 2.0)
-        val c2: Complex = Complex(3.0, 4.0)
-        val c3: Complex = c1 + c2
+    val calc1: Int = calculate(5, 3)
+    val calc2: Int = calculate(5)
 
-        // Test pattern matching
-        val resultStatus: String = ProcessResult(Result.Success)
+    val pair: Pair<String, Int> = pairOf("test", 42)
 
-        // Test class hierarchy and virtual methods
-        val dog: Dog = Dog()
-        val sound: String = dog.Speak()
+    val nums: Array<Int> = [1, 2, 3, 4, 5]
+    val filtered: Array<Int> = filter(nums) { it > 2 }
 
-        // Test person with property accessors
-        val person: Person = Person(25)
-        person.Age = 30
-        val formatted: String = FormatPerson(person)
+    countdown(5)
 
-        // Test range loops
-        val rangeSum: Int = SumRange(1, 10)
-
-        // Test method overloading
-        val calc1: Int = Calculate(5, 3)
-        val calc2: Int = Calculate(5)
-
-        // Test generic pair creation
-        val pair: Pair<String, Int> = CreatePair<String, Int>("test", 42)
-
-        // Test filter with lambda
-        val nums: Int[] = [1, 2, 3, 4, 5]
-        val filtered: Int[] = Filter(nums) { n: Int -> n > 2 }
-
-        // Test countdown loop
-        val countdown: Int = Countdown(5)
-
-        return 0
-    }
+    return 0
 }

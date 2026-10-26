@@ -1,4 +1,7 @@
 package builtIn
 
-class KlarTokens {
+import TokenType
+
+enum class KlarTokenType: TokenType {
+    Identifier
 }

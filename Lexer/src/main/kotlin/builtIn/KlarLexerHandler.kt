@@ -3,12 +3,20 @@ package builtIn
 import Lexer
 import LexerRule
 
-internal class BloomLexerHandler(val lexer: Lexer) {
-    fun init() {
-
+object KlarLexerHandler {
+    fun register(lexer: Lexer) {
+        for (rule in rules(lexer)) {
+            lexer.registerRule(rule)
+        }
     }
 
-    val rules: List<LexerRule> = listOf(
-        
-    )
+    val rules: (lexer: Lexer) -> List<LexerRule> = {
+        listOf(
+            WhitespaceRule(it),
+            PunctuationRule(it),
+            NumberRule(it),
+            StringOrCharRule(it),
+            IdentifierOrKeywordRule(it),
+        )
+    }
 }
