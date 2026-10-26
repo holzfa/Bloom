@@ -2,7 +2,7 @@ package builtIn
 
 import TokenType
 
-enum class LiteralTokenTypes: TokenType {
+enum class LiteralTokenType: TokenType {
     Int,
     Long,
     Float,

@@ -6,7 +6,7 @@ import LexerRule
 import Token
 import Vec2
 
-internal class IdentifierRule(override val lexer: Lexer): LexerRule {
+internal class IdentifierOrKeywordRule(override val lexer: Lexer): LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
         if (!reader.peek().isLetter()) return null
 
