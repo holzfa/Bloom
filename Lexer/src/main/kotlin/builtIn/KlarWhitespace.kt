@@ -19,6 +19,6 @@ class WhitespaceRule(override val lexer: Lexer): LexerRule {
             else break
         }
 
-        return Token(DefaultTokenTypes.Whitespace, reader.substring(start, reader.cursor), TextRange.fromStart(pos, reader.cursor - start))
+        return Token(KlarTokenType.Whitespace, reader.substring(start, reader.cursor), TextRange.fromStart(pos, reader.cursor - start))
     }
 }
