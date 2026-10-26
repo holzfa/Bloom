@@ -46,7 +46,7 @@ class Container<T> {
 }
 
 fun Container<Int>.Sum() -> Int {
-    var total: Int = 0
+    var total: Int = 0b000
     for (item in self.Items) {
         total += item
     }

@@ -21,7 +21,7 @@ internal class NumberRule(override val lexer: Lexer) : LexerRule {
         val isHex = reader.peek() == '0' && reader.peek(1) == 'x'
         val isBin = reader.peek() == '0' && reader.peek(1) == 'b'
 
-        if (isHex || isBin) for (i in 0..2) reader.advance()
+        if (isHex || isBin) for (i in 1..2) reader.advance()
 
         while (!reader.isAtEnd) {
             val c = reader.peek()

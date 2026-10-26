@@ -14,11 +14,11 @@ object KlarLexerHandler {
         listOf(
             WhitespaceRule(it),
             CommentRule(it),
+            IdentifierOrKeywordRule(it),
             OperatorRule(it),
             PunctuationRule(it),
             NumberRule(it),
             StringOrCharRule(it),
-            IdentifierOrKeywordRule(it),
         )
     }
 }

@@ -9,13 +9,13 @@ import Vec2
 
 internal class IdentifierOrKeywordRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
-        if (!reader.peek().isLetter()) return null
+        if (!reader.peek().isLetter() || reader.peek() == '_') return null
 
         val start = reader.cursor
         val pos = Vec2(reader.line, reader.column)
 
         while (!reader.isAtEnd) {
-            if (reader.peek().isLetter()) reader.advance()
+            if (reader.peek().isLetterOrDigit() || reader.peek() == '_') reader.advance()
             else break
         }
 
