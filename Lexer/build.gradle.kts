@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "2.4.20"
 }
 
-group = "io.holzfa.Gloom"
+group = "io.holzfa.bloom"
 version = "0.0.1"
 
 repositories {

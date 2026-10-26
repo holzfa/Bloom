@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "io.holzfa.bloom"
-version = "unspecified"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
