@@ -8,7 +8,6 @@ class Lexer(bag: MessageBag = MessageBag()) : CompilerStage(bag, "Lexer") {
     fun tokenize(source: String): List<Token> {
         val tokens = mutableListOf<Token>()
         val reader = LexerReader(source)
-        reader.registerNewlineCallback { char -> tokens.add(Token(DefaultTokenTypes.Whitespace, char.toString(), TextRange(reader.line, reader.column, 1))) }
 
         while (!reader.isAtEnd) {
             var matched = false

@@ -6,13 +6,7 @@ class LexerReader(private val input: String) {
     var column = 1
         private set
 
-    private var onNewline: (c: Char) -> Unit = { }
-
     val isAtEnd: Boolean get() { return cursor >= input.length }
-
-    fun registerNewlineCallback(callback: (c: Char) -> Unit) {
-        onNewline = callback
-    }
 
     fun peek(offset: Int = 0): Char {
         val idx = cursor + offset
@@ -24,8 +18,6 @@ class LexerReader(private val input: String) {
         if (c == '\n') {
             line++
             column = 1
-
-            onNewline(c)
         } else {
             column++
         }
