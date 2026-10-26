@@ -3,15 +3,14 @@ package builtIn
 import Lexer
 import LexerReader
 import LexerRule
+import TextRange
 import Token
 import TokenType
-import TextRange
 import Vec2
 
-private val acceptedNumberChars = charArrayOf('.', '_')
 private val hexChars = charArrayOf('a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C', 'D', 'E', 'F')
 
-internal class NumberRule(override val lexer: Lexer): LexerRule {
+internal class NumberRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
         if (!reader.peek().isDigit()) return null // Fast early return that skips variable instantiation for speed
 
@@ -29,8 +28,7 @@ internal class NumberRule(override val lexer: Lexer): LexerRule {
 
             if (c == '_' && reader.peek(1).isDigit()) { // Handle '_' separation for big numbers
                 reader.advance()
-            }
-            else if (c.isDigit() && !isHex && !isBin) { // Handle normal digits
+            } else if (c.isDigit() && !isHex && !isBin) { // Handle normal digits
                 reader.advance()
             } else if (!isFloat && c == '.' && reader.peek(1).isDigit()) { // Handle the single '.' for float/double
                 isFloat = true
@@ -50,10 +48,12 @@ internal class NumberRule(override val lexer: Lexer): LexerRule {
                 reader.advance()
                 LiteralTokenType.Double
             }
+
             'l', 'L' -> {
                 reader.advance()
                 LiteralTokenType.Long
             }
+
             else -> {
                 if (isFloat) LiteralTokenType.Float
                 else LiteralTokenType.Int
@@ -68,7 +68,7 @@ internal class NumberRule(override val lexer: Lexer): LexerRule {
     }
 }
 
-internal class StringOrCharRule(override val lexer: Lexer): LexerRule {
+internal class StringOrCharRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
         if (!arrayOf('"', '\'').contains(reader.peek())) return null
         val quoteChar = reader.peek()

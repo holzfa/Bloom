@@ -3,10 +3,11 @@ package builtIn
 import Lexer
 import LexerReader
 import LexerRule
+import TextRange
 import Token
 import Vec2
 
-internal class IdentifierOrKeywordRule(override val lexer: Lexer): LexerRule {
+internal class IdentifierOrKeywordRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
         if (!reader.peek().isLetter()) return null
 

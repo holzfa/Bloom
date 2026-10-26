@@ -3,10 +3,11 @@ package builtIn
 import Lexer
 import LexerReader
 import LexerRule
+import TextRange
 import Token
 import Vec2
 
-class WhitespaceRule(override val lexer: Lexer): LexerRule {
+class WhitespaceRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
         if (!reader.peek().isWhitespace()) return null
         val wChar = reader.peek()
@@ -19,6 +20,10 @@ class WhitespaceRule(override val lexer: Lexer): LexerRule {
             else break
         }
 
-        return Token(KlarTokenType.Whitespace, reader.substring(start, reader.cursor), TextRange.fromStart(pos, reader.cursor - start))
+        return Token(
+            KlarTokenType.Whitespace,
+            reader.substring(start, reader.cursor),
+            TextRange.fromStart(pos, reader.cursor - start)
+        )
     }
 }

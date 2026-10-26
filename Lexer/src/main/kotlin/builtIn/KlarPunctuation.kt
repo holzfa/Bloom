@@ -3,11 +3,12 @@ package builtIn
 import Lexer
 import LexerReader
 import LexerRule
+import TextRange
 import Token
 import Vec2
 import isPunctuation
 
-internal class PunctuationRule(override val lexer: Lexer): LexerRule {
+internal class PunctuationRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
         val c = reader.peek()
         if (!c.isPunctuation()) return null
