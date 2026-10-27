@@ -10,4 +10,8 @@ data class Token(
             type.name
         }
     }
+
+    companion object {
+        val error = Token(DefaultTokenTypes.Error, "", TextPos.unknown)
+    }
 }

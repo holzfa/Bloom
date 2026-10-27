@@ -3,6 +3,7 @@ interface TokenType {
 }
 
 enum class DefaultTokenTypes(val const: String? = null): TokenType {
+    Error,
     Unknown,
     Eof
 }

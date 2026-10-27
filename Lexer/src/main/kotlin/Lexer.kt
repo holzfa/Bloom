@@ -6,6 +6,11 @@ class Lexer(bag: MessageBag = MessageBag()) : CompilerStage<TextPos>(bag, "Lexer
     }
 
     fun tokenize(source: String): List<Token> {
+        if (!rules.any()) {
+            doError("No lexer rules were registered.", TextPos(-1, -1, 0))
+            return listOf()
+        }
+
         val tokens = mutableListOf<Token>()
         val reader = LexerReader(source)
 

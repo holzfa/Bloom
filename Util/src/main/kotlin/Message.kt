@@ -13,9 +13,9 @@ enum class Severity {
 
     override fun toString(): String {
         return when(this) {
-            Info -> "INFO"
-            Warning -> "WARN"
-            Error -> "EROR"
+            Info -> "INFO "
+            Warning -> "WARN "
+            Error -> "ERROR"
         }
     }
 }
