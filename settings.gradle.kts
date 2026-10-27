@@ -15,3 +15,4 @@ rootProject.name = "Bloom"
 include("Lexer")
 include("Cli")
 include("Util")
+include("Parser")

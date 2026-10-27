@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation(project(":Lexer"))
     implementation(project(":Util"))
+    implementation(project(":Parser"))
     testImplementation(kotlin("test"))
 }
 
