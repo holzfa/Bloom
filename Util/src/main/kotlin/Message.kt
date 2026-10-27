@@ -1,6 +1,8 @@
-data class Message(val message: String, val textRange: TextRange, val stage: String, val severity: Severity) {
+import java.io.Serializable
+
+class Message<TPos: Serializable>(val message: String, val pos: TPos, val stage: String, val severity: Severity) {
     override fun toString(): String {
-        return "[$severity] $stage: '$message' - at $textRange"
+        return "[$severity] $stage: '$message' - at $pos"
     }
 }
 

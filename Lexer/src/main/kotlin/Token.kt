@@ -1,7 +1,7 @@
 data class Token(
     val type: TokenType,
     val value: String,
-    val pos: TextRange
+    val pos: TextPos
 ) {
     override fun toString(): String {
         return if (value.any()) {

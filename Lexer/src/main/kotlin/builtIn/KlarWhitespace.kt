@@ -3,7 +3,7 @@ package builtIn
 import Lexer
 import LexerReader
 import LexerRule
-import TextRange
+import TextPos
 import Token
 import Vec2
 
@@ -23,7 +23,7 @@ class WhitespaceRule(override val lexer: Lexer) : LexerRule {
         return Token(
             KlarTokenType.Whitespace,
             reader.substring(start, reader.cursor),
-            TextRange.fromStart(pos, reader.cursor - start)
+            TextPos.fromStart(pos, reader.cursor - start)
         )
     }
 }

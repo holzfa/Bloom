@@ -3,7 +3,7 @@ package builtIn
 import Lexer
 import LexerReader
 import LexerRule
-import TextRange
+import TextPos
 import Token
 import Vec2
 
@@ -27,6 +27,6 @@ internal class IdentifierOrKeywordRule(override val lexer: Lexer) : LexerRule {
         val text = reader.substring(start, reader.cursor)
         val type = if (keywords.containsKey(text)) keywords.getValue(text) else KlarTokenType.Identifier
 
-        return Token(type, text, TextRange.fromStart(pos, reader.cursor - start))
+        return Token(type, text, TextPos.fromStart(pos, reader.cursor - start))
     }
 }

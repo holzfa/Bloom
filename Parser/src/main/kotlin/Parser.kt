@@ -1,3 +1,3 @@
-class Parser(bag: MessageBag = MessageBag()) : CompilerStage(bag, "Parser") {
+class Parser(bag: MessageBag = MessageBag()) : CompilerStage<TextRange>(bag, "Parser") {
 
 }

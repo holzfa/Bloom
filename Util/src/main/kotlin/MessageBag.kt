@@ -1,8 +1,10 @@
-class MessageBag {
-    val messages: List<Message>
-        field: MutableList<Message> = mutableListOf<Message>()
+import java.io.Serializable
 
-    fun add(message: Message) {
+class MessageBag {
+    val messages: List<Message<Serializable>>
+        field: MutableList<Message<Serializable>> = mutableListOf()
+
+    fun add(message: Message<Serializable>) {
         messages.add(message)
     }
 }

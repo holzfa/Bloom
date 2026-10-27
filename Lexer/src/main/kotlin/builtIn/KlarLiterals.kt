@@ -3,7 +3,7 @@ package builtIn
 import Lexer
 import LexerReader
 import LexerRule
-import TextRange
+import TextPos
 import Token
 import TokenType
 import Vec2
@@ -64,7 +64,7 @@ internal class NumberRule(override val lexer: Lexer) : LexerRule {
             LiteralTokenType.Double, LiteralTokenType.Long -> reader.cursor - 1
             else -> reader.cursor
         }
-        return Token(type, reader.substring(start, end), TextRange.fromStart(pos, reader.cursor - start))
+        return Token(type, reader.substring(start, end), TextPos.fromStart(pos, reader.cursor - start))
     }
 }
 
@@ -88,18 +88,18 @@ internal class StringOrCharRule(override val lexer: Lexer) : LexerRule {
                 if (c == '"' && reader.peek(1) == '"' && reader.peek(2) == '"') {
                     val text = reader.substring(start + 3, reader.cursor) // Get the content of the string without quotes
                     for (i in 1..quoteLength) reader.advance()
-                    return Token(type, text, TextRange.fromStart(pos, reader.cursor - start))
+                    return Token(type, text, TextPos.fromStart(pos, reader.cursor - start))
                 }
             } else {
                 if (c == quoteChar) {
                     val text = reader.substring(start + 1, reader.cursor)
                     reader.advance()
-                    return Token(type, text, TextRange.fromStart(pos, reader.cursor - start))
+                    return Token(type, text, TextPos.fromStart(pos, reader.cursor - start))
                 }
 
                 if (c == '\n') {
                     // The newline is left for the whitespace rule
-                    val range = TextRange.fromStart(pos, reader.cursor - start)
+                    val range = TextPos.fromStart(pos, reader.cursor - start)
                     lexer.doError("String/Char was cut off by end of line", range)
                     return Token(type, reader.substring(start + quoteLength, reader.cursor), range)
                 }
@@ -113,7 +113,7 @@ internal class StringOrCharRule(override val lexer: Lexer) : LexerRule {
             }
         }
 
-        val range = TextRange.fromStart(pos, reader.cursor - start)
+        val range = TextPos.fromStart(pos, reader.cursor - start)
         lexer.doError("String/Char was cut off by end of file", range)
         return Token(type, reader.substring(start + quoteLength, reader.cursor), range)
     }

@@ -3,7 +3,7 @@ package builtIn
 import Lexer
 import LexerReader
 import LexerRule
-import TextRange
+import TextPos
 import Token
 import Vec2
 
@@ -20,7 +20,7 @@ internal class SymbolRule(override val lexer: Lexer) : LexerRule {
             val pos = Vec2(reader.line, reader.column)
             for (i in 1..length) reader.advance()
 
-            return Token(type, text, TextRange.fromStart(pos, length))
+            return Token(type, text, TextPos.fromStart(pos, length))
         }
 
         return null
