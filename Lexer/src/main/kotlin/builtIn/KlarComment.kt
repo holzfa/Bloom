@@ -7,45 +7,48 @@ import TextRange
 import Token
 import Vec2
 
-private val commentChars = arrayOf('/', '*')
 class CommentRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
-        if (reader.peek() != '/' && commentChars.contains(reader.peek(1))) return null
+        if (reader.peek() != '/') return null
+
+        val isMultiDoc = reader.peek(1) == '/' && reader.peek(2) == '*'
+        val isDoc = reader.peek(1) == '/' && reader.peek(2) == '/'
+        val isLine = reader.peek(1) == '/'
+        val isMultiline = reader.peek(1) == '*'
+        if (!isLine && !isMultiline) return null
 
         val start = reader.cursor
         val pos = Vec2(reader.line, reader.column)
 
-        val isMultiline = reader.peek() == '/' && reader.peek(1) == '*'
-        val isMultiDoc = reader.peek() == '/' && reader.peek(1) == '/' && reader.peek(2) == '*'
-        val isDoc = reader.peek() == '/' && reader.peek(1) == '/' && reader.peek(2) == '/'
+        val prefixLength = if (isMultiDoc || isDoc) 3 else 2
+        for (i in 1..prefixLength) reader.advance()
 
-        if (isMultiDoc || isDoc) for (i in 1..3) reader.advance()
-        else for (i in 1..2) reader.advance()
-
-        while (!reader.isAtEnd) {
-            // Normal or Doc comment
-            if (!isMultiline && !isMultiDoc) {
-                val c = reader.advance()
-                if (c == '\n') {
+        if (isMultiline || isMultiDoc) {
+            var closed = false
+            while (!reader.isAtEnd) {
+                if (isMultiDoc && reader.peek() == '*' && reader.peek(1) == '/' && reader.peek(2) == '/') {
+                    for (i in 1..3) reader.advance()
+                    closed = true
                     break
                 }
-            }
-
-            if (isMultiline) {
-                if (reader.advance() == '*' && reader.advance() == '/') {
+                if (isMultiline && reader.peek() == '*' && reader.peek(1) == '/') {
+                    for (i in 1..2) reader.advance()
+                    closed = true
                     break
                 }
+                reader.advance()
             }
 
-            if (isMultiDoc) {
-                if (reader.advance() == '*' && reader.advance() == '/' && reader.advance() == '/') {
-                    break
-                }
+            if (!closed) {
+                lexer.doError("Comment was cut off by end of file", TextRange.fromStart(pos, reader.cursor - start))
             }
+        } else {
+            // The newline is left for the whitespace rule
+            while (!reader.isAtEnd && reader.peek() != '\n') reader.advance()
         }
 
         val type = if (isDoc || isMultiDoc) KlarTokenType.Documentation
-            else KlarTokenType.Comment
+        else KlarTokenType.Comment
 
         return Token(
             type,

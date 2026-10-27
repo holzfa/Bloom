@@ -37,7 +37,7 @@ class Container<T> {
     fun Map<U>(mapper: (item: T) -> U) -> Array<U> {
         val new: Array<U> = Array(items.length)
 
-        for (i in 0..items.length) {
+        for (i in 0..#items) {
             new[i] = mapper(items[i])
         }
 

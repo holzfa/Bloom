@@ -73,29 +73,39 @@ internal class StringOrCharRule(override val lexer: Lexer) : LexerRule {
         if (!arrayOf('"', '\'').contains(reader.peek())) return null
         val quoteChar = reader.peek()
 
-        val isMultiline = reader.peek() == '"' && reader.peek(1) == '"' && reader.peek(2) == '"'
+        val isMultiline = quoteChar == '"' && reader.peek(1) == '"' && reader.peek(2) == '"'
         val quoteLength = if (isMultiline) 3 else 1
+        val type = if (quoteChar == '\'') LiteralTokenType.Char else LiteralTokenType.String
 
         val start = reader.cursor
         val pos = Vec2(reader.line, reader.column)
         for (i in 1..quoteLength) reader.advance()
 
         while (!reader.isAtEnd) {
-            if (isMultiline && reader.peek() == '"' && reader.peek(1) == '"' && reader.peek(2) == '"') {
-                val text = reader.substring(start + 3, reader.cursor) // Get the content of the string without quotes
-                for (i in 1..quoteLength) reader.advance()
-                return Token(LiteralTokenType.String, text, TextRange.fromStart(pos, reader.cursor - start))
-            } else if (reader.peek() == quoteChar) {
-                val text = reader.substring(start + 1, reader.cursor)
-                reader.advance()
-                return if (quoteChar == '\'') {
-                    Token(LiteralTokenType.Char, text, TextRange.fromStart(pos, reader.cursor - start))
-                } else {
-                    Token(LiteralTokenType.String, text, TextRange.fromStart(pos, reader.cursor - start))
+            val c = reader.peek()
+
+            if (isMultiline) {
+                if (c == '"' && reader.peek(1) == '"' && reader.peek(2) == '"') {
+                    val text = reader.substring(start + 3, reader.cursor) // Get the content of the string without quotes
+                    for (i in 1..quoteLength) reader.advance()
+                    return Token(type, text, TextRange.fromStart(pos, reader.cursor - start))
+                }
+            } else {
+                if (c == quoteChar) {
+                    val text = reader.substring(start + 1, reader.cursor)
+                    reader.advance()
+                    return Token(type, text, TextRange.fromStart(pos, reader.cursor - start))
+                }
+
+                if (c == '\n') {
+                    // The newline is left for the whitespace rule
+                    val range = TextRange.fromStart(pos, reader.cursor - start)
+                    lexer.doError("String/Char was cut off by end of line", range)
+                    return Token(type, reader.substring(start + quoteLength, reader.cursor), range)
                 }
             }
 
-            if (reader.peek() == '\\') {
+            if (c == '\\') {
                 reader.advance()
                 if (!reader.isAtEnd) reader.advance()
             } else {
@@ -103,8 +113,8 @@ internal class StringOrCharRule(override val lexer: Lexer) : LexerRule {
             }
         }
 
-        lexer.doError("String/Char was cut off by end of file", TextRange.fromStart(pos, reader.cursor - start))
-        val type = if (quoteChar == '\'') LiteralTokenType.Char else LiteralTokenType.String
-        return Token(type, reader.substring(start, reader.cursor), TextRange.fromStart(pos, reader.cursor - start))
+        val range = TextRange.fromStart(pos, reader.cursor - start)
+        lexer.doError("String/Char was cut off by end of file", range)
+        return Token(type, reader.substring(start + quoteLength, reader.cursor), range)
     }
 }

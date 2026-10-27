@@ -15,8 +15,7 @@ object KlarLexerHandler {
             WhitespaceRule(it),
             CommentRule(it),
             IdentifierOrKeywordRule(it),
-            OperatorRule(it),
-            PunctuationRule(it),
+            SymbolRule(it),
             NumberRule(it),
             StringOrCharRule(it),
         )

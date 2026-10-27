@@ -14,7 +14,7 @@ class LexerReader(private val input: String) {
     }
 
     fun advance(): Char {
-        if (input.length < cursor) return '\u0000'
+        if (isAtEnd) return '\u0000'
 
         val c = input[cursor++]
         if (c == '\n') {

@@ -22,8 +22,8 @@ class Lexer(bag: MessageBag = MessageBag()) : CompilerStage(bag, "Lexer") {
             }
 
             if (!matched) {
-                val badChar = reader.advance()
                 val range = TextRange(reader.line, reader.column, 1)
+                val badChar = reader.advance()
                 doError("Unknown character '$badChar'", range)
                 tokens.add(Token(DefaultTokenTypes.Unknown, badChar.toString(), range))
             }
