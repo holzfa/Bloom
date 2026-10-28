@@ -34,7 +34,7 @@ class Parser(bag: MessageBag = MessageBag()) : CompilerStage<TextRange>(bag, "Pa
             if (!matched) {
                 val badToken = reader.advance()
                 val range = reader.range(badToken.pos)
-
+                // doError("Unknown token '$badToken'", range)
             }
         }
 

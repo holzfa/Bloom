@@ -1,13 +1,20 @@
 import builtIn.tokentypes.KlarTokenType
+import builtIn.tokentypes.SymbolTokenType
 
-class ParserReader(rawTokens: List<Token>, val filePath: String, bag: MessageBag): CompilerStage<TextRange>(bag, "Parser") {
+class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag: MessageBag): CompilerStage<TextRange>(bag, "Parser") {
     var cursor = 0
+        private set
+
+    var rawCursor = 0
         private set
 
     private val tokens: List<Token> = rawTokens.filter { it.type != KlarTokenType.Whitespace }
 
     val currentPos: Vec2
         get() = peek().pos.startVec
+    val currentRange: TextRange
+        get() = range(peek().pos)
+
     fun range(start: Vec2, end: Vec2): TextRange {
         return TextRange(start, end, filePath)
     }
@@ -24,10 +31,24 @@ class ParserReader(rawTokens: List<Token>, val filePath: String, bag: MessageBag
         val idx = cursor + offset
         return if (idx < tokens.size) tokens[idx] else tokens.lastOrNull() ?: Token.error
     }
+    private fun peekRaw(offset: Int = 0): Token {
+        val idx = rawCursor + offset
+        return if (idx < rawTokens.size) rawTokens[idx] else rawTokens.lastOrNull() ?: Token.error
+    }
 
     fun advance(): Token {
         if (isAtEnd) return Token.error
-        return tokens[cursor++]
+        val token = tokens[cursor++]
+
+        // Sync the raw cursor
+        while (rawCursor < rawTokens.size && rawTokens[rawCursor] != token) {
+            rawCursor++
+        }
+        if (rawCursor < rawTokens.size) { // Consume the matched token as well
+            rawCursor++
+        }
+
+        return token
     }
 
     fun expect(type: TokenType, errorMessage: String): Token {
@@ -51,6 +72,18 @@ class ParserReader(rawTokens: List<Token>, val filePath: String, bag: MessageBag
         } else {
             advance()
             return token
+        }
+    }
+
+    fun isTerminator(): Boolean {
+        val token = peekRaw()
+        return token.type == KlarTokenType.Whitespace && token.value.contains('\n')
+                || token.type == SymbolTokenType.Semicolon
+    }
+
+    fun expectTerminator() {
+        if (!isTerminator()) {
+            doError("Expected statement termination", currentRange)
         }
     }
 }

@@ -20,7 +20,6 @@ fun main() {
     val tokens = lexer.tokenize(File(file).readText())
     if (!bag.anyErrors){
         val ast = parser.parse(tokens, file)
-        print(ast.toString())
     }
 
     for (m in bag.messages) {
