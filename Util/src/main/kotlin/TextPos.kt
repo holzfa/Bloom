@@ -5,8 +5,10 @@ data class TextPos(val line: Int, val col: Int, val length: Int): Serializable {
         return "$line:$col($length)"
     }
 
-    val vec: Vec2
+    val startVec: Vec2
         get() = Vec2(line, col)
+    val endVec: Vec2
+        get() = Vec2(line, col + length)
 
     companion object {
         val unknown = TextPos(-1, -1, 0)

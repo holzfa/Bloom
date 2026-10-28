@@ -1,5 +1,8 @@
 module Tests
 
+import Test
+from SuperTest import first, second, third
+
 trait Printable {
     fun toString(): String
 }
