@@ -23,18 +23,20 @@ class Parser(bag: MessageBag = MessageBag()) : CompilerStage<TextRange>(bag, "Pa
             var matched = false
 
             for (rule in rules) {
+                reader.mark()
                 val node = rule.tryMatch(reader)
                 if (node != null) {
                     matched = true
                     nodes.add(node)
                     break
                 }
+                reader.reset()
             }
 
             if (!matched) {
                 val badToken = reader.advance()
                 val range = reader.range(badToken.pos)
-                // doError("Unknown token '$badToken'", range)
+                doError("Unknown token '$badToken'", range)
             }
         }
 
