@@ -1,4 +1,4 @@
-package builtIn
+package builtIn.tokentypes
 
 import TokenType
 

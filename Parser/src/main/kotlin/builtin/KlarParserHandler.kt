@@ -2,7 +2,6 @@ package builtin
 
 import Parser
 import ParserRule
-import tree.AstNode
 
 object KlarParserHandler {
     fun register(lexer: Parser) {
@@ -11,9 +10,9 @@ object KlarParserHandler {
         }
     }
 
-    val rules: (lexer: Parser) -> List<ParserRule<AstNode>> = {
-        listOf(
-
+    val rules: (parser: Parser) -> List<ParserRule<*>> = {
+        listOf<ParserRule<*>>(
+            ImportRule(it),
         )
     }
 }

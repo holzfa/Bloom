@@ -12,7 +12,7 @@ class Lexer(bag: MessageBag = MessageBag()) : CompilerStage<TextPos>(bag, "Lexer
         }
 
         val tokens = mutableListOf<Token>()
-        val reader = LexerReader(source)
+        val reader = LexerReader(source, bag)
 
         while (!reader.isAtEnd) {
             var matched = false

@@ -6,6 +6,8 @@ import LexerRule
 import TextPos
 import Token
 import Vec2
+import builtIn.tokentypes.KlarTokenType
+import builtIn.tokentypes.keywords
 
 internal class IdentifierOrKeywordRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {

@@ -1,4 +1,4 @@
-class LexerReader(private val input: String) {
+class LexerReader(private val input: String, bag: MessageBag): CompilerStage<TextRange>(bag, "Lexer") {
     var cursor = 0
         private set
     var line = 1
