@@ -11,13 +11,11 @@ import builtIn.tokentypes.KlarTokenType
 class WhitespaceRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
         if (!reader.peek().isWhitespace()) return null
-        val wChar = reader.peek()
-
         val start = reader.cursor
         val pos = Vec2(reader.line, reader.column)
 
         while (!reader.isAtEnd) {
-            if (reader.peek() == wChar) reader.advance()
+            if (reader.peek().isWhitespace()) reader.advance()
             else break
         }
 
