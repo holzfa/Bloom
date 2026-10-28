@@ -6,7 +6,7 @@ import LexerRule
 import TextPos
 import Token
 import Vec2
-import builtin.tokentypes.KlarTokenType
+import builtin.tokentypes.VuraTokenType
 import builtin.tokentypes.keywords
 
 internal class IdentifierOrKeywordRule(override val lexer: Lexer) : LexerRule {
@@ -27,7 +27,7 @@ internal class IdentifierOrKeywordRule(override val lexer: Lexer) : LexerRule {
         }
 
         val text = reader.substring(start, reader.cursor)
-        val type = if (keywords.containsKey(text)) keywords.getValue(text) else KlarTokenType.Identifier
+        val type = if (keywords.containsKey(text)) keywords.getValue(text) else VuraTokenType.Identifier
 
         return Token(type, text, TextPos.fromStart(pos, reader.cursor - start))
     }

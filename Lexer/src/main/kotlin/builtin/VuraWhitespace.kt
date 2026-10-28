@@ -6,7 +6,7 @@ import LexerRule
 import TextPos
 import Token
 import Vec2
-import builtin.tokentypes.KlarTokenType
+import builtin.tokentypes.VuraTokenType
 
 class WhitespaceRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
@@ -20,7 +20,7 @@ class WhitespaceRule(override val lexer: Lexer) : LexerRule {
         }
 
         return Token(
-            KlarTokenType.Whitespace,
+            VuraTokenType.Whitespace,
             reader.substring(start, reader.cursor),
             TextPos.fromStart(pos, reader.cursor - start)
         )

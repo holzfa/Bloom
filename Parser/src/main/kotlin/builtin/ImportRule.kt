@@ -1,12 +1,12 @@
 package builtin
 
 import Parser
-import ParserRule
 import ParserReader
-import builtin.tokentypes.KeywordTokenType
-import builtin.tokentypes.KlarTokenType
-import builtin.tokentypes.SymbolTokenType
+import ParserRule
 import builtin.nodes.ImportStatement
+import builtin.tokentypes.KeywordTokenType
+import builtin.tokentypes.SymbolTokenType
+import builtin.tokentypes.VuraTokenType
 
 internal class ImportRule(override val parser: Parser): ParserRule<ImportStatement> {
     /**
@@ -20,7 +20,7 @@ internal class ImportRule(override val parser: Parser): ParserRule<ImportStateme
         reader.advance()
 
         if (startType == KeywordTokenType.Import) {
-            val pathToken = reader.expect(KlarTokenType.Identifier, "Expected a path to import")
+            val pathToken = reader.expect(VuraTokenType.Identifier, "Expected a path to import")
             reader.expectTerminator()
             return if (pathToken != null) {
                 ImportStatement(pathToken.value, null, reader.range(start))
@@ -28,16 +28,16 @@ internal class ImportRule(override val parser: Parser): ParserRule<ImportStateme
                 null
             }
         } else {
-            val pathToken = reader.expect(KlarTokenType.Identifier, "Expected a path to import") ?: return null
+            val pathToken = reader.expect(VuraTokenType.Identifier, "Expected a path to import") ?: return null
 
             reader.expect(KeywordTokenType.Import) ?: return null
 
             val selection = mutableListOf<String>()
             while (!reader.isAtEnd) {
-                val symbolToken = reader.hope(KlarTokenType.Identifier)
+                val symbolToken = reader.hope(VuraTokenType.Identifier)
                 if (symbolToken != null) {
                     selection.add(symbolToken.value)
-                    if (!reader.isTerminator() && reader.peek(1).type == KlarTokenType.Identifier) {
+                    if (!reader.isTerminator() && reader.peek(1).type == VuraTokenType.Identifier) {
                         reader.expect(SymbolTokenType.Comma)
                     }
                 } else {

@@ -1,5 +1,5 @@
-import builtin.tokentypes.KlarTokenType
 import builtin.tokentypes.SymbolTokenType
+import builtin.tokentypes.VuraTokenType
 
 class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag: MessageBag): CompilerStage<TextRange>(bag, "Parser.Rule"), Rollback {
     var cursor = 0
@@ -9,9 +9,9 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
         private set
 
     private val filteredTypes = listOf<TokenType>(
-        KlarTokenType.Whitespace,
-        KlarTokenType.Comment,
-        KlarTokenType.Documentation
+        VuraTokenType.Whitespace,
+        VuraTokenType.Comment,
+        VuraTokenType.Documentation
     )
     private val tokens: List<Token> = rawTokens.filter { !filteredTypes.contains(it.type) }
 
@@ -87,11 +87,11 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
     fun isTerminator(): Boolean {
         var offset = 0
         var token = peekRaw(offset)
-        while (!isAtEnd && token.type == KlarTokenType.Comment || token.type == KlarTokenType.Documentation) {
+        while (!isAtEnd && token.type == VuraTokenType.Comment || token.type == VuraTokenType.Documentation) {
             token = peekRaw(offset++)
         }
 
-        return token.type == KlarTokenType.Whitespace && token.value.contains('\n')
+        return token.type == VuraTokenType.Whitespace && token.value.contains('\n')
                 || token.type == SymbolTokenType.Semicolon || isAtEnd
     }
 

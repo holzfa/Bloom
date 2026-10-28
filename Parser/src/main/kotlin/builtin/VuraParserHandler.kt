@@ -3,7 +3,7 @@ package builtin
 import Parser
 import ParserRule
 
-object KlarParserHandler {
+object VuraParserHandler {
     fun register(lexer: Parser) {
         for (rule in rules(lexer)) {
             lexer.registerRule(rule)

@@ -6,7 +6,7 @@ import LexerRule
 import TextPos
 import Token
 import Vec2
-import builtin.tokentypes.KlarTokenType
+import builtin.tokentypes.VuraTokenType
 
 class CommentRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
@@ -48,8 +48,8 @@ class CommentRule(override val lexer: Lexer) : LexerRule {
             while (!reader.isAtEnd && reader.peek() != '\n') reader.advance()
         }
 
-        val type = if (isDoc || isMultiDoc) KlarTokenType.Documentation
-        else KlarTokenType.Comment
+        val type = if (isDoc || isMultiDoc) VuraTokenType.Documentation
+        else VuraTokenType.Comment
 
         return Token(
             type,

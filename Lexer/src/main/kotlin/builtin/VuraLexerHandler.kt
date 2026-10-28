@@ -3,7 +3,7 @@ package builtin
 import Lexer
 import LexerRule
 
-object KlarLexerHandler {
+object VuraLexerHandler {
     fun register(lexer: Lexer) {
         for (rule in rules(lexer)) {
             lexer.registerRule(rule)
