@@ -12,7 +12,7 @@ class Parser(bag: MessageBag = MessageBag()) : CompilerStage<TextRange>(bag, "Pa
     fun parse(tokens: List<Token>, filePath: String): FileNode {
         val nodes = mutableListOf<AstNode>()
         val reader = ParserReader(tokens, filePath, bag)
-        val fileRange = reader.range(Vec2(1,1), tokens.last().pos.endVec)
+        val fileRange = reader.range(Vec2(1,1), tokens.lastOrNull()?.pos?.endVec ?: Vec2(1,1))
 
         if (!rules.any()) {
             doError("No parser rules were registered.", fileRange)

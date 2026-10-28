@@ -1,7 +1,7 @@
-import builtIn.tokentypes.KlarTokenType
-import builtIn.tokentypes.SymbolTokenType
+import builtin.tokentypes.KlarTokenType
+import builtin.tokentypes.SymbolTokenType
 
-class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag: MessageBag): CompilerStage<TextRange>(bag, "Parser"), Rollback {
+class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag: MessageBag): CompilerStage<TextRange>(bag, "Parser.Rule"), Rollback {
     var cursor = 0
         private set
 
@@ -24,7 +24,11 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
         return TextRange(start, end, filePath)
     }
     fun range(start: Vec2): TextRange {
-        return TextRange(start, peek(-1).pos.endVec, filePath)
+        if (cursor > 0) {
+            return TextRange(start, peek(-1).pos.endVec, filePath)
+        } else {
+            return TextRange(start, peek().pos.endVec, filePath)
+        }
     }
     fun range(pos: TextPos): TextRange {
         return TextRange(pos.startVec, pos.endVec, filePath)
@@ -56,24 +60,24 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
         return token
     }
 
-    fun expect(type: TokenType, errorMessage: String): Token {
+    fun expect(type: TokenType, errorMessage: String): Token? {
         val token = peek()
         if (token.type != type) {
             doError(errorMessage, range(token.pos))
-            return Token.error
+            return null
         } else {
             advance()
             return token
         }
     }
-    fun expect(type: TokenType): Token {
+    fun expect(type: TokenType): Token? {
         return expect(type, "Expected '${type.name}'")
     }
 
-    fun hope(type: TokenType): Token {
+    fun hope(type: TokenType): Token? {
         val token = peek()
         if (token.type != type) {
-            return Token.error
+            return null
         } else {
             advance()
             return token

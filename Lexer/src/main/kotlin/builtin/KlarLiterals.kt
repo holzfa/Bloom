@@ -1,4 +1,4 @@
-package builtIn
+package builtin
 
 import Lexer
 import LexerReader
@@ -7,7 +7,7 @@ import TextPos
 import Token
 import TokenType
 import Vec2
-import builtIn.tokentypes.LiteralTokenType
+import builtin.tokentypes.LiteralTokenType
 
 private val hexChars = charArrayOf('a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C', 'D', 'E', 'F')
 

@@ -1,4 +1,4 @@
-package builtIn.tokentypes
+package builtin.tokentypes
 
 import TokenType
 
@@ -58,8 +58,8 @@ enum class SymbolTokenType: TokenType {
 
     ParenthesisOpen,
     ParenthesisClose,
-    BracketOpen,
-    BracketClose,
+    BraceOpen,
+    BraceClose,
     SquareOpen,
     SquareClose
 }
@@ -124,8 +124,8 @@ val symbols: Map<String, TokenType> = mapOf(
 
     Pair("(", SymbolTokenType.ParenthesisOpen),
     Pair(")", SymbolTokenType.ParenthesisClose),
-    Pair("{", SymbolTokenType.BracketOpen),
-    Pair("}", SymbolTokenType.BracketClose),
+    Pair("{", SymbolTokenType.BraceOpen),
+    Pair("}", SymbolTokenType.BraceClose),
     Pair("[", SymbolTokenType.SquareOpen),
     Pair("]", SymbolTokenType.SquareClose),
 )

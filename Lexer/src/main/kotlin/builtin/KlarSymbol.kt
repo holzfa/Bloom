@@ -1,4 +1,4 @@
-package builtIn
+package builtin
 
 import Lexer
 import LexerReader
@@ -6,7 +6,7 @@ import LexerRule
 import TextPos
 import Token
 import Vec2
-import builtIn.tokentypes.symbols
+import builtin.tokentypes.symbols
 
 internal class SymbolRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {

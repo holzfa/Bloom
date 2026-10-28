@@ -1,4 +1,4 @@
-package builtIn
+package builtin
 
 import Lexer
 import LexerRule

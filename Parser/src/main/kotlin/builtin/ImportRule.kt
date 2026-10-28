@@ -3,10 +3,10 @@ package builtin
 import Parser
 import ParserRule
 import ParserReader
-import builtIn.tokentypes.KeywordTokenType
-import builtIn.tokentypes.KlarTokenType
-import builtIn.tokentypes.SymbolTokenType
-import tree.builtin.nodes.ImportStatement
+import builtin.tokentypes.KeywordTokenType
+import builtin.tokentypes.KlarTokenType
+import builtin.tokentypes.SymbolTokenType
+import builtin.nodes.ImportStatement
 
 internal class ImportRule(override val parser: Parser): ParserRule<ImportStatement> {
     /**
@@ -22,22 +22,20 @@ internal class ImportRule(override val parser: Parser): ParserRule<ImportStateme
         if (startType == KeywordTokenType.Import) {
             val pathToken = reader.expect(KlarTokenType.Identifier, "Expected a path to import")
             reader.expectTerminator()
-            return if (pathToken != Token.error) {
+            return if (pathToken != null) {
                 ImportStatement(pathToken.value, null, reader.range(start))
             } else {
                 null
             }
         } else {
-            val pathToken = reader.expect(KlarTokenType.Identifier, "Expected a path to import")
-            if (pathToken == Token.error) { return null }
+            val pathToken = reader.expect(KlarTokenType.Identifier, "Expected a path to import") ?: return null
 
-            val importToken = reader.expect(KeywordTokenType.Import)
-            if (importToken == Token.error) { return null }
+            reader.expect(KeywordTokenType.Import) ?: return null
 
             val selection = mutableListOf<String>()
             while (!reader.isAtEnd) {
                 val symbolToken = reader.hope(KlarTokenType.Identifier)
-                if (symbolToken != Token.error) {
+                if (symbolToken != null) {
                     selection.add(symbolToken.value)
                     if (!reader.isTerminator() && reader.peek(1).type == KlarTokenType.Identifier) {
                         reader.expect(SymbolTokenType.Comma)

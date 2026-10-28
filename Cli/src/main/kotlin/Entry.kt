@@ -3,7 +3,7 @@ package io.holzfa.bloom
 import Lexer
 import MessageBag
 import Parser
-import builtIn.KlarLexerHandler
+import builtin.KlarLexerHandler
 import builtin.KlarParserHandler
 import java.io.File
 
