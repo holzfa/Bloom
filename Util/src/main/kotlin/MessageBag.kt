@@ -1,6 +1,6 @@
 import java.io.Serializable
 
-class MessageBag {
+class MessageBag: Rollback {
     val messages: List<Message<Serializable>>
         field: MutableList<Message<Serializable>> = mutableListOf()
 
@@ -11,5 +11,17 @@ class MessageBag {
 
     fun add(message: Message<Serializable>) {
         messages.add(message)
+    }
+
+
+    private var marked = listOf<Message<Serializable>>()
+    override fun mark() {
+        marked = messages
+    }
+    override fun reset() {
+        messages.run {
+            clear()
+            addAll(marked)
+        }
     }
 }

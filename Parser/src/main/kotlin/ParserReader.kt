@@ -1,7 +1,7 @@
 import builtIn.tokentypes.KlarTokenType
 import builtIn.tokentypes.SymbolTokenType
 
-class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag: MessageBag): CompilerStage<TextRange>(bag, "Parser") {
+class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag: MessageBag): CompilerStage<TextRange>(bag, "Parser"), Rollback {
     var cursor = 0
         private set
 
@@ -90,12 +90,14 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
 
     private var marked: Int = 0
     private var rawMarked: Int = 0
-    fun mark() {
+    override fun mark() {
         if (marked != cursor) marked = cursor
         if (rawMarked != rawCursor) rawMarked = rawCursor
+        bag.mark()
     }
-    fun reset() {
+    override fun reset() {
         if (marked != cursor) cursor = marked
         if (rawMarked != rawCursor) rawCursor = rawMarked
+        bag.reset()
     }
 }
