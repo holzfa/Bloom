@@ -19,7 +19,7 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
         return TextRange(start, end, filePath)
     }
     fun range(start: Vec2): TextRange {
-        return TextRange(start, peek().pos.endVec, filePath)
+        return TextRange(start, peek(-1).pos.endVec, filePath)
     }
     fun range(pos: TextPos): TextRange {
         return TextRange(pos.startVec, pos.endVec, filePath)

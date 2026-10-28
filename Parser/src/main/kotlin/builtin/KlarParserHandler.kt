@@ -13,6 +13,7 @@ object KlarParserHandler {
     val rules: (parser: Parser) -> List<ParserRule<*>> = {
         listOf<ParserRule<*>>(
             ImportRule(it),
+            ModuleStatementRule(it),
         )
     }
 }
