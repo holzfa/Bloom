@@ -8,7 +8,12 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
     var rawCursor = 0
         private set
 
-    private val tokens: List<Token> = rawTokens.filter { it.type != KlarTokenType.Whitespace }
+    private val filteredTypes = listOf<TokenType>(
+        KlarTokenType.Whitespace,
+        KlarTokenType.Comment,
+        KlarTokenType.Documentation
+    )
+    private val tokens: List<Token> = rawTokens.filter { !filteredTypes.contains(it.type) }
 
     val currentPos: Vec2
         get() = peek().pos.startVec
@@ -76,9 +81,14 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
     }
 
     fun isTerminator(): Boolean {
-        val token = peekRaw()
+        var offset = 0
+        var token = peekRaw(offset)
+        while (!isAtEnd && token.type == KlarTokenType.Comment || token.type == KlarTokenType.Documentation) {
+            token = peekRaw(offset++)
+        }
+
         return token.type == KlarTokenType.Whitespace && token.value.contains('\n')
-                || token.type == SymbolTokenType.Semicolon
+                || token.type == SymbolTokenType.Semicolon || isAtEnd
     }
 
     fun expectTerminator() {
@@ -91,13 +101,13 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
     private var marked: Int = 0
     private var rawMarked: Int = 0
     override fun mark() {
-        if (marked != cursor) marked = cursor
-        if (rawMarked != rawCursor) rawMarked = rawCursor
+        marked = cursor
+        rawMarked = rawCursor
         bag.mark()
     }
     override fun reset() {
-        if (marked != cursor) cursor = marked
-        if (rawMarked != rawCursor) rawCursor = rawMarked
+        cursor = marked
+        rawCursor = rawMarked
         bag.reset()
     }
 }

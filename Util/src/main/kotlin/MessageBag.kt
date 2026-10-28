@@ -14,14 +14,13 @@ class MessageBag: Rollback {
     }
 
 
-    private var marked = listOf<Message<Serializable>>()
+    private val marked = mutableListOf<Message<Serializable>>()
     override fun mark() {
-        marked = messages
+        marked.clear()
+        marked.addAll(messages)
     }
     override fun reset() {
-        messages.run {
-            clear()
-            addAll(marked)
-        }
+        messages.clear()
+        messages.addAll(marked)
     }
 }
