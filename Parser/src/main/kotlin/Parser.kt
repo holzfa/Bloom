@@ -23,12 +23,14 @@ class Parser(bag: MessageBag = MessageBag()) : CompilerStage<TextRange>(bag, "Pa
             var matched = false
 
             for (rule in rules) {
+                reader.mark()
                 val node = rule.tryMatch(reader)
                 if (node != null) {
                     matched = true
                     nodes.add(node)
                     break
                 }
+                reader.reset()
             }
 
             if (!matched) {

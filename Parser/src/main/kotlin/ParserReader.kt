@@ -86,4 +86,16 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
             doError("Expected statement termination", currentRange)
         }
     }
+
+
+    private var marked: Int = 0
+    private var rawMarked: Int = 0
+    fun mark() {
+        marked = cursor
+        rawMarked = rawCursor
+    }
+    fun reset() {
+        cursor = marked
+        rawCursor = rawMarked
+    }
 }
