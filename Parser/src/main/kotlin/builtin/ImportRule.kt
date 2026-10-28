@@ -21,6 +21,7 @@ internal class ImportRule(override val parser: Parser): ParserRule<ImportStateme
 
         if (startType == KeywordTokenType.Import) {
             val pathToken = reader.expect(KlarTokenType.Identifier, "Expected a path to import")
+            reader.expectTerminator()
             return if (pathToken != Token.error) {
                 ImportStatement(pathToken.value, null, reader.range(start))
             } else {
@@ -38,7 +39,7 @@ internal class ImportRule(override val parser: Parser): ParserRule<ImportStateme
                 val symbolToken = reader.hope(KlarTokenType.Identifier)
                 if (symbolToken != Token.error) {
                     selection.add(symbolToken.value)
-                    if (reader.peek(1).type == KlarTokenType.Identifier) {
+                    if (!reader.isTerminator() && reader.peek(1).type == KlarTokenType.Identifier) {
                         reader.expect(SymbolTokenType.Comma)
                     }
                 } else {
@@ -46,6 +47,7 @@ internal class ImportRule(override val parser: Parser): ParserRule<ImportStateme
                 }
             }
             reader.hope(SymbolTokenType.Comma) // Consume trailing comma
+            reader.expectTerminator()
 
             return ImportStatement(pathToken.value, selection, reader.range(start))
         }
