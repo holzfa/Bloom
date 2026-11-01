@@ -1,45 +1,100 @@
-import tree.AstNode
-import tree.ErrorFile
-import tree.FileNode
+class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, "Parser") {
+    private val rules = mutableListOf<ParserRule>()
 
-class Parser(bag: MessageBag = MessageBag()) : CompilerStage<TextRange>(bag, "Parser") {
-    private val rules = mutableListOf<ParserRule<*>>()
-
-    fun registerRule(rule: ParserRule<*>) {
+    /** Registers a rule that is used to parse an ASTNode */
+    fun registerRule(rule: ParserRule) {
         rules.add(rule)
     }
 
+    /** Parses a pre-lexed file and returns its AST tree */
     fun parse(tokens: List<Token>, filePath: String): FileNode {
-        val nodes = mutableListOf<AstNode>()
         val reader = ParserReader(tokens, filePath, bag)
         val fileRange = reader.range(Vec2(1,1), tokens.lastOrNull()?.pos?.endVec ?: Vec2(1,1))
 
-        if (!rules.any()) {
+        if (rules.isEmpty()) {
             doError("No parser rules were registered.", fileRange)
             return ErrorFile(fileRange)
         }
 
-        while (!reader.isAtEnd) {
-            var matched = false
+        val nodes = requestDeclarationsUntil(reader) { true }
 
-            for (rule in rules) {
-                reader.mark()
-                val node = rule.tryMatch(reader)
-                if (node != null) {
-                    matched = true
-                    nodes.add(node)
-                    break
-                }
-                reader.reset()
+        return FileNode(nodes, fileRange)
+    }
+
+    /** Requests a declaration node to be parsed and returns it if parsing was successful */
+    fun requestDeclaration(reader: ParserReader): DeclarationNode? {
+        for (rule in rules) {
+            reader.mark()
+            val node = rule.tryDeclaration(reader)
+            if (node != null) {
+                return node
             }
+            reader.reset()
+        }
 
-            if (!matched) {
+        return null
+    }
+
+    /** Requests a statement node to be parsed and returns it if parsing was successful */
+    fun requestStatement(reader: ParserReader): StatementNode? {
+        for (rule in rules) {
+            reader.mark()
+            val node = rule.tryStatement(reader)
+            if (node != null) {
+                return node
+            }
+            reader.reset()
+        }
+
+        return null
+    }
+
+    /** Requests an expression node to be parsed and returns it if parsing was successful */
+    fun requestExpression(reader: ParserReader): ExpressionNode? {
+        for (rule in rules) {
+            reader.mark()
+            val node = rule.tryExpression(reader)
+            if (node != null) {
+                return node
+            }
+            reader.reset()
+        }
+
+        return null
+    }
+
+
+    /** Requests declaration nodes to be parsed until the condition is false *or* the reader has reached its end */
+    fun requestDeclarationsUntil(reader: ParserReader, condition: (reader: ParserReader) -> Boolean): List<DeclarationNode> {
+        val nodes = mutableListOf<DeclarationNode>()
+
+        while (!reader.isAtEnd && condition(reader)) {
+            val match = requestDeclaration(reader)
+
+            if (match == null) {
                 val badToken = reader.advance()
                 val range = reader.range(badToken.pos)
                 doError("Unknown token '$badToken'", range)
             }
         }
 
-        return FileNode(nodes, fileRange)
+        return nodes
+    }
+
+    /** Requests statement nodes to be parsed until the condition is false *or* the reader has reached its end */
+    fun requestStatementsUntil(reader: ParserReader, condition: (reader: ParserReader) -> Boolean): List<StatementNode> {
+        val nodes = mutableListOf<StatementNode>()
+
+        while (!reader.isAtEnd && condition(reader)) {
+            val match = requestStatement(reader)
+
+            if (match == null) {
+                val badToken = reader.advance()
+                val range = reader.range(badToken.pos)
+                doError("Unknown token '$badToken'", range)
+            }
+        }
+
+        return nodes
     }
 }

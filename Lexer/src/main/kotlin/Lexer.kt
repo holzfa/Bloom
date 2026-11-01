@@ -1,4 +1,4 @@
-class Lexer(bag: MessageBag = MessageBag()) : CompilerStage<TextPos>(bag, "Lexer") {
+class Lexer(bag: MessageBag = MessageBag()) : MessageCollector<TextPos>(bag, "Lexer") {
     private val rules = mutableListOf<LexerRule>()
 
     fun registerRule(rule: LexerRule) {

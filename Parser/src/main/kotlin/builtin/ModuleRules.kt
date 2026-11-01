@@ -1,26 +1,34 @@
 package builtin
 
+import DeclarationNode
 import Parser
 import ParserReader
 import ParserRule
-import builtin.nodes.ModuleStatement
+import builtin.nodes.ModuleDeclaration
 import builtin.tokentypes.KeywordTokenType
-import builtin.tokentypes.VuraTokenType
+import builtin.tokentypes.SymbolTokenType
 
-internal class ModuleStatementRule(override val parser: Parser): ParserRule<ModuleStatement> {
-    override fun tryMatch(reader: ParserReader): ModuleStatement? {
+internal class ModuleRule(override val parser: Parser): ParserRule() {
+    override fun tryDeclaration(reader: ParserReader): ModuleDeclaration? {
         val startType = reader.peek().type
         if (startType != KeywordTokenType.Module) return null
 
         val start = reader.currentPos
         reader.advance()
 
-        val pathToken = reader.expect(VuraTokenType.Identifier, "Expected a module path")
-        reader.expectTerminator()
-        return if (pathToken != null) {
-            ModuleStatement(pathToken.value, reader.range(start))
+        val path = parseIdentifier(reader) ?: return null
+
+        val declarations = mutableListOf<DeclarationNode>()
+        if (!reader.isNext(SymbolTokenType.BraceOpen)) {
+            // Single module
+            reader.expectTerminator()
+            declarations.addAll(parser.requestDeclarationsUntil(reader) { true })
         } else {
-            null
+            // Scoped module
+            reader.expect(SymbolTokenType.BraceOpen)
+            declarations.addAll(parser.requestDeclarationsUntil(reader) { !reader.isNext(SymbolTokenType.BraceClose) })
+            reader.expect(SymbolTokenType.BraceClose)
         }
+        return ModuleDeclaration(path, declarations, reader.range(start))
     }
 }

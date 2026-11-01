@@ -1,9 +1,5 @@
-package tree
-
-import TextRange
-
 abstract class AstNode(open val pos: TextRange)
-open class FileNode(val nodes: List<AstNode>, pos: TextRange): AstNode(pos)
+open class FileNode(val nodes: List<DeclarationNode>, pos: TextRange): AstNode(pos)
 
 abstract class DeclarationNode(pos: TextRange): AstNode(pos)
 abstract class StatementNode(pos: TextRange): AstNode(pos)

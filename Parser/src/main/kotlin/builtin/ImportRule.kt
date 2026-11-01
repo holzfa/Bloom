@@ -3,16 +3,14 @@ package builtin
 import Parser
 import ParserReader
 import ParserRule
-import builtin.nodes.ImportStatement
+import builtin.nodes.Identifier
+import builtin.nodes.ImportDeclaration
 import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
 import builtin.tokentypes.VuraTokenType
 
-internal class ImportRule(override val parser: Parser): ParserRule<ImportStatement> {
-    /**
-     * EXAMPLE: `import SomeModule` or `from SomeModule import test, test2`
-     */
-    override fun tryMatch(reader: ParserReader): ImportStatement? {
+internal class ImportRule(override val parser: Parser): ParserRule() {
+    override fun tryDeclaration(reader: ParserReader): ImportDeclaration? {
         val startType = reader.peek().type
         if (startType != KeywordTokenType.Import && startType != KeywordTokenType.From) return null
 
@@ -20,24 +18,25 @@ internal class ImportRule(override val parser: Parser): ParserRule<ImportStateme
         reader.advance()
 
         if (startType == KeywordTokenType.Import) {
-            val pathToken = reader.expect(VuraTokenType.Identifier, "Expected a path to import")
+            val path = parseIdentifier(reader)
             reader.expectTerminator()
-            return if (pathToken != null) {
-                ImportStatement(pathToken.value, null, reader.range(start))
+
+            return if (path != null) {
+                ImportDeclaration(path, null, reader.range(start))
             } else {
                 null
             }
         } else {
-            val pathToken = reader.expect(VuraTokenType.Identifier, "Expected a path to import") ?: return null
+            val path = parseIdentifier(reader) ?: return null
 
             reader.expect(KeywordTokenType.Import) ?: return null
 
-            val selection = mutableListOf<String>()
+            val selection = mutableListOf<Identifier>()
             while (!reader.isAtEnd) {
-                val symbolToken = reader.hope(VuraTokenType.Identifier)
-                if (symbolToken != null) {
-                    selection.add(symbolToken.value)
-                    if (!reader.isTerminator() && reader.peek(1).type == VuraTokenType.Identifier) {
+                val symbol = parseIdentifier(reader)
+                if (symbol != null) {
+                    selection.add(symbol)
+                    if (!reader.isTerminator() && reader.hasSequence(SymbolTokenType.Comma, VuraTokenType.Identifier)) {
                         reader.expect(SymbolTokenType.Comma)
                     }
                 } else {
@@ -47,7 +46,7 @@ internal class ImportRule(override val parser: Parser): ParserRule<ImportStateme
             reader.hope(SymbolTokenType.Comma) // Consume trailing comma
             reader.expectTerminator()
 
-            return ImportStatement(pathToken.value, selection, reader.range(start))
+            return ImportDeclaration(path, selection, reader.range(start))
         }
     }
 }

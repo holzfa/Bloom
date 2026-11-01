@@ -1,6 +1,6 @@
 package tree
 
-import kotlin.collections.mutableMapOf
+import AstNode
 import kotlin.reflect.KClass
 
 /**

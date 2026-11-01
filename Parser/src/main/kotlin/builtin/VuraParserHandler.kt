@@ -10,10 +10,10 @@ object VuraParserHandler {
         }
     }
 
-    val rules: (parser: Parser) -> List<ParserRule<*>> = {
-        listOf<ParserRule<*>>(
+    val rules: (parser: Parser) -> List<ParserRule> = {
+        listOf(
             ImportRule(it),
-            ModuleStatementRule(it),
+            ModuleRule(it),
         )
     }
 }
