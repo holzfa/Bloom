@@ -4,7 +4,7 @@ import Parser
 import ParserReader
 import ParserRule
 import builtin.nodes.Identifier
-import builtin.nodes.ImportDeclaration
+import builtin.nodes.declarations.ImportDeclaration
 import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
 import builtin.tokentypes.VuraTokenType

@@ -4,7 +4,7 @@ import DeclarationNode
 import Parser
 import ParserReader
 import ParserRule
-import builtin.nodes.ModuleDeclaration
+import builtin.nodes.declarations.ModuleDeclaration
 import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
 

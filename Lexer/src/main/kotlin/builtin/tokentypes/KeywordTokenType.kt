@@ -17,7 +17,6 @@ enum class KeywordTokenType: TokenType {
     Protected,
     Private,
 
-    Static,
     Weak,
     Extern,
 
@@ -27,10 +26,11 @@ enum class KeywordTokenType: TokenType {
 
     Struct,
     Class,
+    Object,
     Trait,
     Enum,
     Extensions,
-    Fun,
+    Function,
 
     If,
     Else,
@@ -46,7 +46,6 @@ enum class KeywordTokenType: TokenType {
     Import,
     From,
 
-    Ref,
     Get,
     Set,
     Prop,
@@ -71,7 +70,6 @@ val keywords: Map<String, TokenType> = mapOf(
     Pair("protected", KeywordTokenType.Protected),
     Pair("private", KeywordTokenType.Private),
 
-    Pair("static", KeywordTokenType.Static),
     Pair("weak", KeywordTokenType.Weak),
     Pair("extern", KeywordTokenType.Extern),
 
@@ -81,10 +79,11 @@ val keywords: Map<String, TokenType> = mapOf(
 
     Pair("struct", KeywordTokenType.Struct),
     Pair("class", KeywordTokenType.Class),
+    Pair("object", KeywordTokenType.Object),
     Pair("trait", KeywordTokenType.Trait),
     Pair("enum", KeywordTokenType.Enum),
     Pair("extensions", KeywordTokenType.Extensions),
-    Pair("fun", KeywordTokenType.Fun),
+    Pair("fun", KeywordTokenType.Function),
 
     Pair("if", KeywordTokenType.If),
     Pair("else", KeywordTokenType.Else),
@@ -100,7 +99,6 @@ val keywords: Map<String, TokenType> = mapOf(
     Pair("import", KeywordTokenType.Import),
     Pair("from", KeywordTokenType.From),
 
-    Pair("ref", KeywordTokenType.Ref),
     Pair("get", KeywordTokenType.Get),
     Pair("set", KeywordTokenType.Set),
     Pair("prop", KeywordTokenType.Prop),
