@@ -19,10 +19,6 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
     val currentPos: Vec2
         get() = peek().pos.startVec
 
-    /** Gets the range of the current token */
-    val currentRange: TextRange
-        get() = range(peek().pos)
-
     /** Creates a range from the specified start and end positions */
     fun range(start: Vec2, end: Vec2): TextRange {
         return TextRange(start, end, filePath)
@@ -129,7 +125,7 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
     /** Checks for a statement terminator and errors out if none is found */
     fun expectTerminator() {
         if (!isTerminator()) {
-            doError("Expected statement termination", currentRange)
+            doError("Expected statement termination", range(currentPos))
         }
     }
 

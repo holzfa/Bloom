@@ -6,7 +6,7 @@ import builtin.nodes.*
 import java.util.*
 
 data class FunctionDeclaration(
-    val modifiers: EnumSet<Modifier>,
+    val modifiers: Set<Modifier>,
     val name: Identifier,
     val generics: List<GenericNode>?,
     val parameters: List<Parameter>,

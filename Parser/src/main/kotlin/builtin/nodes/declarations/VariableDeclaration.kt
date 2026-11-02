@@ -9,7 +9,7 @@ import builtin.nodes.VariableModifier
 import java.util.*
 
 data class VariableDeclaration(
-    val modifiers: EnumSet<Modifier>,
+    val modifiers: Set<Modifier>,
     val type: VariableModifier,
     val name: Identifier,
     val initializer: ExpressionNode?,

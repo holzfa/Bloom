@@ -8,7 +8,7 @@ import builtin.nodes.Parameter
 import java.util.*
 
 data class EnumDeclaration(
-    val modifiers: EnumSet<Modifier>,
+    val modifiers: Set<Modifier>,
     val name: Identifier,
     val parameters: List<Parameter>?,
     val base: ImplementationNode?,

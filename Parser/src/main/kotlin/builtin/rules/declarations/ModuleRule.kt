@@ -1,9 +1,10 @@
-package builtin
+package builtin.rules.declarations
 
 import DeclarationNode
 import Parser
 import ParserReader
 import ParserRule
+import builtin.helpers.parseIdentifier
 import builtin.nodes.declarations.ModuleDeclaration
 import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType

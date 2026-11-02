@@ -9,7 +9,7 @@ import builtin.nodes.PropertyAccessor
 import java.util.*
 
 data class PropertyDeclaration(
-    val modifiers: EnumSet<Modifier>,
+    val modifiers: Set<Modifier>,
     val name: Identifier,
     val getter: PropertyAccessor?,
     val setter: PropertyAccessor?,

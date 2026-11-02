@@ -2,6 +2,8 @@ package builtin
 
 import Parser
 import ParserRule
+import builtin.rules.declarations.ImportRule
+import builtin.rules.declarations.ModuleRule
 
 object VuraParserHandler {
     fun register(lexer: Parser) {

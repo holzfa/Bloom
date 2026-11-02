@@ -5,7 +5,7 @@ import TextRange
 import TypeNode
 
 data class GenericNode(
-    val name: String,
+    val name: Identifier,
     val constraints: List<Constraint>,
     override val pos: TextRange
 ) : AstNode(pos)

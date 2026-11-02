@@ -7,7 +7,7 @@ import builtin.nodes.Modifier
 import java.util.*
 
 data class ObjectDeclaration(
-    val modifiers: EnumSet<Modifier>,
+    val modifiers: Set<Modifier>,
     val name: Identifier,
     val bases: List<ImplementationNode>?,
     val declarations: List<DeclarationNode>?,
