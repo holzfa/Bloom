@@ -7,6 +7,7 @@ import builtin.nodes.Identifier
 import builtin.nodes.Parameter
 import builtin.nodes.declarations.ImplementationNode
 import builtin.tokentypes.SymbolTokenType
+import builtin.tokentypes.VuraTokenType
 
 fun parseBase(reader: ParserReader, parser: Parser): ImplementationNode? {
     val start = reader.currentPos
@@ -27,10 +28,14 @@ fun parseBase(reader: ParserReader, parser: Parser): ImplementationNode? {
 fun parseBases(reader: ParserReader, parser: Parser): List<ImplementationNode>? {
     val start = reader.currentPos
 
-    val impls = mutableListOf<ImplementationNode>()
-    while (!reader.isAtEnd && reader.peek().type != SymbolTokenType.BraceOpen) {
-        // ToDo: I have no clue how to do this...
+    if (reader.hope(SymbolTokenType.Colon) != null) {
+        val impls = mutableListOf<ImplementationNode>()
+        while (!reader.isAtEnd && reader.peek().type == VuraTokenType.Identifier) {
+            val impl = parseBase(reader, parser)
+            if (impl != null) impls.add(impl)
+        }
+        return if (impls.isEmpty()) null else impls
     }
 
-    return if (impls.isEmpty()) null else impls
+    return null
 }

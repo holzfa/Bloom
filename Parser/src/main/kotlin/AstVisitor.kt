@@ -1,6 +1,3 @@
-package tree
-
-import AstNode
 import kotlin.reflect.KClass
 
 /**

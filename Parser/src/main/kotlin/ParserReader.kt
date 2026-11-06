@@ -99,7 +99,7 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
         doError("Skipped token: ${token.type}", range(token.pos))
     }
 
-    /** Checks for a sequence of token types at the current position */
+    /** Checks for a sequence of token types at the current position, it does not mutate the readers state */
     fun hasSequence(vararg types: TokenType): Boolean {
         for (idx in types.indices) {
             if (peek(idx).type != types[idx]) return false

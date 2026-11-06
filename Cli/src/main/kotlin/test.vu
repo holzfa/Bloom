@@ -3,21 +3,7 @@ module Tests
 import Test
 from SuperTest import first, second, third
 
-trait Printable {
-    fun toString(): String
-}
-
-struct Vector2<T> : Printable {
-    var x: T
-    var y: T
-
-    impl fun toString() -> String {
-        "Vector"
-    }
-}
-struct IVec2 : Vector2<Int>
-
-class Container<T> {
+class Container<T>(val name: String) : Printable {
     private prop items: Array<T> {
         get() it
         set() it = value
@@ -47,6 +33,20 @@ class Container<T> {
         new
     }
 }
+
+trait Printable<T> : Printable {
+    fun toString(): String
+}
+
+struct Vector2<T> : Printable {
+    var x: T
+    var y: T
+
+    impl fun toString() -> String {
+        "Vector"
+    }
+}
+struct IVec2 : Vector2<Int>
 
 fun Container<Int>.Sum() -> Int {
     var total: Int = 0b000
@@ -118,21 +118,17 @@ extensions Int {
 }
 
 
-class Complex {
-    val real: Float
-    val imaginary: Float
-
-    Complex(r: Float, i: Float) {
-        real = r
-        imaginary = i
-    }
-
+struct Complex(val real: Float, val imaginary: Float) {
     fun +(other: Complex) -> Complex {
         Complex(real + other.real, imaginary + other.imaginary)
     }
 
     fun *(scalar: Float) -> Complex {
         Complex(real * scalar, imaginary * scalar)
+    }
+
+    fun *(other: Complex) -> Complex {
+        Complex(real * other.real, imaginary * other.imaginary)
     }
 }
 

@@ -75,6 +75,8 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
                 val badToken = reader.advance()
                 val range = reader.range(badToken.pos)
                 doError("Unknown token '$badToken'", range)
+            } else {
+                nodes.add(match)
             }
         }
 
@@ -92,6 +94,8 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
                 val badToken = reader.advance()
                 val range = reader.range(badToken.pos)
                 doError("Unknown token '$badToken'", range)
+            } else {
+                nodes.add(match)
             }
         }
 

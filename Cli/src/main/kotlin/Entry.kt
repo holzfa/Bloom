@@ -3,6 +3,7 @@ package io.holzfa.bloom
 import Lexer
 import MessageBag
 import Parser
+import builtin.DebugAstPrinter
 import builtin.VuraLexerHandler
 import builtin.VuraParserHandler
 import java.io.File
@@ -16,15 +17,12 @@ fun main() {
     val parser = Parser(bag)
     VuraParserHandler.register(parser)
 
-    val file = "/home/aengstlicher/Code/Kotlin/Bloom/Cli/src/main/kotlin/test.vu"
+    val file = "/home/fabio/IdeaProjects/Bloom/Cli/src/main/kotlin/test.vu"
     val tokens = lexer.tokenize(File(file).readText())
-    if (!bag.anyErrors) {
-        val ast = parser.parse(tokens, file)
-        for (node in ast.nodes) {
-            println(node)
-        }
-    }
+    val ast = parser.parse(tokens, file)
+    print(DebugAstPrinter.visit(ast))
 
+    println("")
     for (m in bag.messages) {
         println(m)
     }
