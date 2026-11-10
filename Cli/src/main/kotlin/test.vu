@@ -9,17 +9,21 @@ class Container<T>(val name: String) : Printable {
         set() it = value
     }
 
+    /*/ Creates a new Container instance /*/
     Container(initial: Array<T>) {
         items = initial
     }
 
     // Method overloading
     fun get(index: Int) -> T {
-        Items[index]
+        items[index]
     }
 
-    fun get() -> T {
-        Items[0]
+    /*/ Gets the first Item
+     *  @Return Returns the first item of the container
+    /*/
+    fun first() -> T {
+        items[0]
     }
 
     // Generic method

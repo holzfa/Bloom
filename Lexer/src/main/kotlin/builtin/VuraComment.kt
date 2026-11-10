@@ -16,7 +16,6 @@ class CommentRule(override val lexer: Lexer) : LexerRule {
         val isDoc = reader.peek(1) == '/' && reader.peek(2) == '/'
         val isLine = reader.peek(1) == '/'
         val isMultiline = reader.peek(1) == '*'
-        if (!isLine && !isMultiline) return null
 
         val start = reader.cursor
         val pos = Vec2(reader.line, reader.column)
@@ -27,7 +26,7 @@ class CommentRule(override val lexer: Lexer) : LexerRule {
         if (isMultiline || isMultiDoc) {
             var closed = false
             while (!reader.isAtEnd) {
-                if (isMultiDoc && reader.peek() == '*' && reader.peek(1) == '/' && reader.peek(2) == '/') {
+                if (isMultiDoc && reader.peek() == '/' && reader.peek(1) == '*' && reader.peek(2) == '/') {
                     for (i in 1..3) reader.advance()
                     closed = true
                     break
