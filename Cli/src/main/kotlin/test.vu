@@ -27,7 +27,7 @@ class Container<T>(val name: String) : Printable {
     }
 
     // Generic method
-    fun Map<U>(mapper: (item: T) -> U) -> Array<U> {
+    fun Map<U>(mapper: (T) -> U) -> Array<U> {
         val new: Array<U> = Array(items.length)
 
         for (i in 0..#items) {
