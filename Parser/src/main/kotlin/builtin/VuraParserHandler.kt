@@ -5,6 +5,7 @@ import ParserRule
 import builtin.rules.declarations.ClassRule
 import builtin.rules.declarations.EnumRule
 import builtin.rules.declarations.ExtensionsRule
+import builtin.rules.declarations.FunctionRule
 import builtin.rules.declarations.ImportRule
 import builtin.rules.declarations.ModuleRule
 import builtin.rules.declarations.ObjectRule
@@ -28,6 +29,7 @@ object VuraParserHandler {
             TraitRule(it),
             EnumRule(it),
             ExtensionsRule(it),
+            FunctionRule(it),
         )
     }
 }

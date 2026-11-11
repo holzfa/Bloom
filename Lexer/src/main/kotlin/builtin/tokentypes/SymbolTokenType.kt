@@ -3,69 +3,69 @@ package builtin.tokentypes
 import TokenType
 
 enum class SymbolTokenType: TokenType {
-    LeftShiftAssign,
 
-    AddAssign,
-    SubtractAssign,
-    MultiplyAssign,
-    DivideAssign,
-    ModuloAssign,
+    LeftShiftAssign /** <<= */,
 
-    AndAssign,
-    OrAssign,
-    XorAssign,
+    AddAssign /** += */,
+    SubtractAssign /** -= */,
+    MultiplyAssign /** *= */,
+    DivideAssign /** /= */,
+    ModuloAssign /** %= */,
 
-    Equality,
-    Inequality,
-    LessThanEqual,
-    LogicalAnd,
-    LogicalOr,
-    LogicalXor,
-    Increment,
-    Decrement,
+    AndAssign /** &= */,
+    OrAssign /** |= */,
+    XorAssign /** ^= */,
 
-    LeftShift,
+    Equality /** == */,
+    Inequality /** != */,
+    LessThanEqual /** <= */,
+    LogicalAnd /** && */,
+    LogicalOr /** || */,
+    LogicalXor /** ^^ */,
+    Increment /** ++ */,
+    Decrement /** -- */,
 
-    Add,
-    Subtract,
-    Multiply,
-    Divide,
-    Modulo,
+    LeftShift /** << */,
 
-    Assign,
+    Add /** + */,
+    Subtract /** - */,
+    Multiply /** * */,
+    Divide /** / */,
+    Modulo /** % */,
 
-    LessThan,
-    GreaterThan,
-    LogicalNot,
-    BitwiseAnd,
-    BitwiseOr,
-    BitwiseXor,
-    Tilde,
-    Nullable,
-    At,
+    Assign /** = */,
 
-    Cast,
-    Arrow,
-    Range,
-    NumberOf,
+    LessThan /** < */,
+    GreaterThan /** > */,
+    LogicalNot /** ! */,
+    BitwiseAnd /** & */,
+    BitwiseOr /** | */,
+    BitwiseXor /** ^ */,
+    Tilde /** ~ */,
+    Nullable /** ? */,
+    At /** @ */,
 
-    Dot,
-    Comma,
-    Semicolon,
-    Colon,
+    Cast /** :: */,
+    Arrow /** -> */,
+    Range /** .. */,
+    NumberOf /** # */,
 
-    Underscore,
+    Dot /** . */,
+    Comma /** , */,
+    Semicolon /** ; */,
+    Colon /** : */,
 
-    ParenthesisOpen,
-    ParenthesisClose,
-    BraceOpen,
-    BraceClose,
-    SquareOpen,
-    SquareClose
+    Underscore /** _ */,
+
+    ParenthesisOpen /** ( */,
+    ParenthesisClose /** ) */,
+    BraceOpen /** { */,
+    BraceClose /** } */,
+    SquareOpen /** [ */,
+    SquareClose /** ] */
 }
 
-// '>>' and '>>=' are intentionally missing: '>' is always a single token so nested generics
-// like Array<Array<Int>> work. The parser combines adjacent '>' tokens into a shift.
+// '>>' and '>>=' are intentionally missing: '>' is always a single token so nested generics work
 val symbols: Map<String, TokenType> = mapOf(
     Pair("<<=", SymbolTokenType.LeftShiftAssign),
 

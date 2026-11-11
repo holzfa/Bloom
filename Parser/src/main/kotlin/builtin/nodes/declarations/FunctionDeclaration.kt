@@ -9,7 +9,7 @@ data class FunctionDeclaration(
     val modifiers: Set<Modifier>,
     val name: Identifier,
     val generics: List<GenericNode>?,
-    val parameters: List<Parameter>,
+    val parameters: List<Parameter>?,
     val body: Block?,
     override val pos: TextRange
 ): DeclarationNode(pos)
