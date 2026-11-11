@@ -25,9 +25,9 @@ private fun parseScalarOrGeneric(reader: ParserReader): TypeNode? {
     if (reader.hope(SymbolTokenType.LessThan) != null) {
         val generics = mutableListOf<TypeNode>()
 
-        while (!reader.isAtEnd && reader.hope(SymbolTokenType.GreaterThan) != null) {
-            val type = parseType(reader)
-            if (type != null) generics.add(type)
+        while (!reader.isAtEnd && reader.hope(SymbolTokenType.GreaterThan) == null) {
+            val type = parseType(reader) ?: break
+            generics.add(type)
         }
 
         val isNullable = reader.hope(SymbolTokenType.Nullable) != null
@@ -43,13 +43,12 @@ private fun parseLambda(reader: ParserReader): LambdaType? {
     reader.expect(SymbolTokenType.ParenthesisOpen)
 
     val params = mutableListOf<TypeNode>()
-    while (!reader.isAtEnd && reader.hope(SymbolTokenType.ParenthesisClose) != null) {
-        val type = parseType(reader)
-        if (type != null) params.add(type)
+    while (!reader.isAtEnd && reader.hope(SymbolTokenType.ParenthesisClose) == null) {
+        val type = parseType(reader) ?: break
+        params.add(type)
     }
 
-    reader.expect(SymbolTokenType.Subtract)
-    reader.expect(SymbolTokenType.GreaterThan)
+    reader.expect(SymbolTokenType.Arrow)
     val isNullable = reader.hope(SymbolTokenType.Nullable) != null
 
     val returnType = parseType(reader) ?: return null

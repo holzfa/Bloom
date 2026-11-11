@@ -11,9 +11,11 @@ import builtin.helpers.parseIdentifier
 import builtin.helpers.parseInstanceBody
 import builtin.helpers.parseModifiers
 import builtin.helpers.parseParametersDeclaration
+import builtin.helpers.parseType
 import builtin.nodes.Identifier
 import builtin.nodes.declarations.FunctionDeclaration
 import builtin.tokentypes.KeywordTokenType
+import builtin.tokentypes.SymbolTokenType
 
 class FunctionRule(override val parser: Parser): ParserRule() {
     override fun tryDeclaration(reader: ParserReader): DeclarationNode? {
@@ -23,10 +25,12 @@ class FunctionRule(override val parser: Parser): ParserRule() {
 
         val name = parseIdentifier(reader) ?: Identifier.empty
         val generics = parseGenericDeclaration(reader)
-
         val parameters = parseParametersDeclaration(reader)
+
+        val returnType = if (reader.hope(SymbolTokenType.Arrow) != null) parseType(reader) else null
+
         val body = parseBlock(reader, parser)
 
-        return FunctionDeclaration(mods, name, generics, parameters, body, reader.range(start))
+        return FunctionDeclaration(mods, name, generics, parameters, returnType, body, reader.range(start))
     }
 }

@@ -31,7 +31,7 @@ fun parseGenericDeclaration(reader: ParserReader): List<GenericNode>? {
         val name = parseIdentifier(reader) ?: break
         val constraints = mutableListOf<Constraint>()
 
-        if (reader.hope(SymbolTokenType.ParenthesisOpen) != null) {
+        if (reader.hope(SymbolTokenType.ParenthesisOpen) == null) {
             while (!reader.isAtEnd && reader.hope(SymbolTokenType.ParenthesisClose) != null) {
                 val const = parseConstraint()
                 if (const != null) constraints.add(const)
