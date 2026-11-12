@@ -11,7 +11,6 @@ import builtin.tokentypes.VuraTokenType
 import java.io.Reader
 
 fun parseType(reader: ParserReader): TypeNode? {
-    val start = reader.currentPos
     return if (reader.peek().type == SymbolTokenType.ParenthesisOpen) {
         parseLambda(reader)
     } else {

@@ -48,7 +48,7 @@ enum class KeywordTokenType: TokenType {
 
     Get,
     Set,
-    Prop,
+    Property,
 
     Is,
     True,
@@ -101,7 +101,7 @@ val keywords: Map<String, TokenType> = mapOf(
 
     Pair("get", KeywordTokenType.Get),
     Pair("set", KeywordTokenType.Set),
-    Pair("prop", KeywordTokenType.Prop),
+    Pair("prop", KeywordTokenType.Property),
 
     Pair("is", KeywordTokenType.Is),
     Pair("true", KeywordTokenType.True),

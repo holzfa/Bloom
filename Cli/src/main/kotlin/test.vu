@@ -5,18 +5,13 @@ from SuperTest import first, second, third
 
 class Container<T>(val name: String) : Printable {
     private prop items: Array<T> {
-        get() it
-        set() it = value
+        get -> it
+        set -> it = value
     }
 
     /*/ Creates a new Container instance /*/
     Container(initial: Array<T>) {
         items = initial
-    }
-
-    // Method overloading
-    fun get(index: Int) -> T {
-        items[index]
     }
 
     /*/ Gets the first Item
@@ -27,7 +22,7 @@ class Container<T>(val name: String) : Printable {
     }
 
     // Generic method
-    fun Map<U>(mapper: (T) -> U) -> Array<U> {
+    fun map<U>(mapper: (T) -> U) -> Array<U> {
         val new: Array<U> = Array(items.length)
 
         for (i in 0..#items) {
@@ -69,8 +64,8 @@ struct Pair<A, B> {
 // Class with property accessors
 class Person(age: Int) {
     prop age: Int {
-        get() it
-        set() it = value
+        get -> it
+        set -> it = value
     }
 }
 
@@ -86,7 +81,7 @@ class Animal {
 }
 
 class Dog : Animal {
-    impl fun Speak() -> String {
+    impl fun speak() -> String {
         "Woof"
     }
 }
@@ -147,7 +142,7 @@ fun processResult(result: Result) -> String {
 }
 
 
-fun filter<T>(items: Array<T>, predicate: (item: T) -> Bool) -> T[] {
+fun filter<T>(items: Array<T>, predicate: (T) -> Bool) -> T[] {
     val new = List<T>(items.length)
 
     for (i in items) {
@@ -158,7 +153,7 @@ fun filter<T>(items: Array<T>, predicate: (item: T) -> Bool) -> T[] {
 }
 
 
-private fun countdown(start: Int) {
+private fun sleepCycles(start: Int) {
     var counter: Int = start
     while (counter > 0) {
         counter -= 1
@@ -227,7 +222,7 @@ fun main(args: Array<String>) -> Int {
     val nums: Array<Int> = [1, 2, 3, 4, 5]
     val filtered: Array<Int> = filter(nums) { it > 2 }
 
-    countdown(5)
+    sleepCycles(5)
 
-    return 0
+    0
 }

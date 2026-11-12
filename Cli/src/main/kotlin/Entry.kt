@@ -22,8 +22,7 @@ fun main() {
     val ast = parser.parse(tokens, file)
     print(DebugAstPrinter.visit(ast))
 
-    println("")
-    for (m in bag.messages) {
+    /* for (m in bag.messages) {
         println(m)
-    }
+    } */
 }

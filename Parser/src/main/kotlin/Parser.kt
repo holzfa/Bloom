@@ -103,8 +103,8 @@
                     doError("Unknown token '$badToken'", range)
                 } else {
                     if (reader.currentPos == startPos) {
-                        val badToken = reader.advance()
-                        error("Parser stuck: statement consumed no tokens ${reader.range(badToken.pos)}")
+                        val position = reader.advance().pos
+                        error("Parser stuck: statement consumed no tokens ${reader.range(position)}")
                     } else {
                         nodes.add(match)
                     }

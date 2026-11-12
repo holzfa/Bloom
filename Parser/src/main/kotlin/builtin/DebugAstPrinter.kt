@@ -11,6 +11,7 @@ import builtin.nodes.declarations.ClassDeclaration
 import builtin.nodes.declarations.EnumDeclaration
 import builtin.nodes.declarations.EnumMember
 import builtin.nodes.declarations.ExtensionsDeclaration
+import builtin.nodes.declarations.FunctionDeclaration
 import builtin.nodes.declarations.ImportDeclaration
 import builtin.nodes.declarations.ModuleDeclaration
 import builtin.nodes.declarations.ObjectDeclaration
@@ -27,6 +28,7 @@ object DebugAstPrinter: AstVisitor<String>() {
         register<ModuleDeclaration> { handleModule(it) }
         register<StructDeclaration> { handleStruct(it) }
         register<ClassDeclaration> { handleClass(it) }
+        register<FunctionDeclaration> { handleFunction(it) }
         register<ObjectDeclaration> { handleObject(it) }
         register<TraitDeclaration> { handleTrait(it) }
         register<EnumDeclaration> { handleEnum(it) }
@@ -48,6 +50,7 @@ object DebugAstPrinter: AstVisitor<String>() {
     private fun handleModule(node: ModuleDeclaration): String = "module ${node.path}\n" + node.declarations.joinToString(separator = "\n") { visit(it) }
     private fun handleStruct(node: StructDeclaration): String = "Struct: '${node.name}' (${if (node.declarations != null) node.declarations.size.toString() else "None"})"
     private fun handleClass(node: ClassDeclaration): String = "Class: '${node.name}' (${if (node.declarations != null) node.declarations.size.toString() else "None"})"
+    private fun handleFunction(node: FunctionDeclaration): String = "Fun: '${node.name}' (${if (node.body?.statements != null) node.body.statements.size.toString() else "None"})"
     private fun handleObject(node: ObjectDeclaration): String = "Object: '${node.name}' (${if (node.declarations != null) node.declarations.size.toString() else "None"})"
     private fun handleTrait(node: TraitDeclaration): String = "Trait: '${node.name}' (${if (node.declarations != null) node.declarations.size.toString() else "None"})"
     private fun handleExtensions(node: ExtensionsDeclaration): String = "Extensions: ${visit(node.targetType)} (${if (node.declarations != null) node.declarations.size.toString() else "None"})"
