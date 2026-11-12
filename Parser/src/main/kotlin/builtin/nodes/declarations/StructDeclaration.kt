@@ -4,9 +4,9 @@ import DeclarationNode
 import TextRange
 import builtin.nodes.GenericNode
 import builtin.nodes.Identifier
+import builtin.nodes.ImplementationNode
 import builtin.nodes.Modifier
 import builtin.nodes.Parameter
-import java.util.*
 
 data class StructDeclaration(
     val modifiers: Set<Modifier>,

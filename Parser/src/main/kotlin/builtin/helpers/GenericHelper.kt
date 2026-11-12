@@ -1,15 +1,12 @@
 package builtin.helpers
 
-import ErrorType
 import ParserReader
 import builtin.nodes.Constraint
 import builtin.nodes.GenericNode
 import builtin.nodes.InstanceConstraint
 import builtin.nodes.TypeConstraint
-import builtin.nodes.declarations.ImplementationNode
 import builtin.tokentypes.SymbolTokenType
 import builtin.tokentypes.VuraTokenType
-import kotlin.time.measureTime
 
 fun parseGenericDeclaration(reader: ParserReader): List<GenericNode>? {
     if (reader.hope(SymbolTokenType.LessThan) == null) return null

@@ -14,6 +14,7 @@ import builtin.rules.declarations.PropertyRule
 import builtin.rules.declarations.StructRule
 import builtin.rules.declarations.TraitRule
 import builtin.rules.declarations.VariableRule
+import builtin.rules.statements.AssignmentRule
 
 object VuraParserHandler {
     fun register(lexer: Parser) {
@@ -24,7 +25,7 @@ object VuraParserHandler {
 
     val rules: (parser: Parser) -> List<ParserRule> = {
         listOf(
-            // These all use keywords so the order does not matter
+            /* DECLARATIONS */
             ImportRule(it),
             ModuleRule(it),
             StructRule(it),
@@ -39,6 +40,10 @@ object VuraParserHandler {
 
             // The last choice as it would otherwise catch on any identifier
             ConstructorRule(it),
+
+            /* STATEMENTS */
+            AssignmentRule(it),
+
         )
     }
 }

@@ -1,9 +1,8 @@
-package builtin.nodes.declarations
+package builtin.nodes
 
 import AstNode
 import ExpressionNode
 import TextRange
-import builtin.nodes.Identifier
 
 data class ImplementationNode(
     val type: Identifier,
