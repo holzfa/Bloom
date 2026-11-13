@@ -7,7 +7,7 @@ import builtin.nodes.Block
 import builtin.nodes.Identifier
 
 data class WhileStatement(
-    val condition: ExpressionNode,
+    val condition: ExpressionNode?,
     val body: Block?,
     override val pos: TextRange
 ): StatementNode(pos)

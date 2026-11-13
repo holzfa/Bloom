@@ -10,7 +10,7 @@ import builtin.nodes.VariableModifier
 data class VariableStatement(
     val mod: VariableModifier,
     val name: Identifier,
-    val type: TypeNode,
-    val initialValue: ExpressionNode,
+    val type: TypeNode?,
+    val initialValue: ExpressionNode?,
     override val pos: TextRange
 ): StatementNode(pos)

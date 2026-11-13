@@ -15,7 +15,7 @@ class Container<T>(val name: String) : Printable {
     }
 
     /*/ Gets the first Item
-     *  @Return Returns the first item of the container
+     *  @Returns The first item of the container
     /*/
     fun first() -> T {
         items[0]
