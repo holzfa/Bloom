@@ -1,4 +1,6 @@
-    class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, "Parser") {
+import kotlin.reflect.KClass
+
+class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, "Parser") {
         private val rules = mutableListOf<ParserRule>()
 
         /** Registers a rule that is used to parse an ASTNode */
@@ -63,6 +65,20 @@
             return null
         }
 
+        /** Requests an expression node to be parsed and returns it if parsing was successful */
+        fun <TRule: ParserRule>requestExpression(reader: ParserReader, except: KClass<TRule>): ExpressionNode? {
+            for (rule in rules.filter { it::class != except }) {
+                reader.mark()
+                val node = rule.tryExpression(reader)
+                if (node != null) {
+                    return node
+                }
+                reader.reset()
+            }
+
+            return null
+        }
+
 
         /** Requests declaration nodes to be parsed until the condition is true *or* the reader has reached its end */
         fun requestDeclarationsUntil(reader: ParserReader, condition: (reader: ParserReader) -> Boolean): List<DeclarationNode> {
@@ -105,6 +121,30 @@
                     if (reader.currentPos == startPos) {
                         val position = reader.advance().pos
                         error("Parser stuck: statement consumed no tokens ${reader.range(position)}")
+                    } else {
+                        nodes.add(match)
+                    }
+                }
+            }
+
+            return nodes
+        }
+
+        fun requestExpressionsUntil(reader: ParserReader, condition: (reader: ParserReader) -> Boolean): List<ExpressionNode> {
+            val nodes = mutableListOf<ExpressionNode>()
+
+            while (!reader.isAtEnd && !condition(reader)) {
+                val startPos = reader.currentPos
+                val match = requestExpression(reader)
+
+                if (match == null) {
+                    val badToken = reader.advance()
+                    val range = reader.range(badToken.pos)
+                    doError("Unknown token '$badToken'", range)
+                } else {
+                    if (reader.currentPos == startPos) {
+                        val position = reader.advance().pos
+                        error("Parser stuck: expression consumed no tokens ${reader.range(position)}")
                     } else {
                         nodes.add(match)
                     }

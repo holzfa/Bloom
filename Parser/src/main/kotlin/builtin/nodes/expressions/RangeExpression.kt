@@ -1,0 +1,12 @@
+package builtin.nodes.expressions
+
+import ExpressionNode
+import TextRange
+import builtin.nodes.Block
+import builtin.nodes.Identifier
+
+data class RangeExpression(
+    val from: ExpressionNode?,
+    val to: ExpressionNode?,
+    override val pos: TextRange
+): ExpressionNode(pos)

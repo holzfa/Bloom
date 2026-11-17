@@ -14,6 +14,13 @@ import builtin.rules.declarations.PropertyDeclRule
 import builtin.rules.declarations.StructRule
 import builtin.rules.declarations.TraitRule
 import builtin.rules.declarations.VariableRule
+import builtin.rules.expressions.CallRule
+import builtin.rules.expressions.IdentifierRule
+import builtin.rules.expressions.IfRule
+import builtin.rules.expressions.IndexRule
+import builtin.rules.expressions.LiteralRule
+import builtin.rules.expressions.NumberOfRule
+import builtin.rules.expressions.RangeRule
 import builtin.rules.statements.AssignmentRule
 import builtin.rules.statements.ExpressionRule
 import builtin.rules.statements.ForRule
@@ -52,6 +59,16 @@ object VuraParserHandler {
             ReturnRule(it),
             VariableRule(it),
             ExpressionRule(it),
+
+            /* EXPRESSIONS */
+            LiteralRule(it),
+            ReturnRule(it),
+            IfRule(it),
+            NumberOfRule(it),
+            IndexRule(it),
+            CallRule(it),
+            RangeRule(it),
+            IdentifierRule(it),
         )
     }
 }

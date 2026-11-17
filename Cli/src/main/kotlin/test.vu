@@ -94,11 +94,11 @@ enum Result {
 }
 
 struct Optional<G>(val value: G?, val result: Result) {
-    static fun withValue(value: G) -> Optional<G> {
+    fun withValue(value: G) -> Optional<G> {
         Optional<G>(value, Result.Success)
     }
 
-    static fun empty() -> Optional<G> {
+    fun empty() -> Optional<G> {
         Optional<G>(null, Result.Failure)
     }
 
@@ -113,6 +113,10 @@ extensions Int {
 
     fun isOdd() -> Bool {
         (self % 2) != 0
+    }
+
+    object {
+        const MaxValue: Int = 2_147_483_647
     }
 }
 
