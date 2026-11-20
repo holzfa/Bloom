@@ -2,30 +2,10 @@ package builtin
 
 import Parser
 import ParserRule
-import builtin.rules.declarations.ClassRule
-import builtin.rules.declarations.ConstructorRule
-import builtin.rules.declarations.EnumRule
-import builtin.rules.declarations.ExtensionsRule
-import builtin.rules.declarations.FunctionRule
-import builtin.rules.declarations.ImportRule
-import builtin.rules.declarations.ModuleRule
-import builtin.rules.declarations.ObjectRule
-import builtin.rules.declarations.PropertyDeclRule
-import builtin.rules.declarations.StructRule
-import builtin.rules.declarations.TraitRule
+import builtin.rules.declarations.*
 import builtin.rules.declarations.VariableRule
-import builtin.rules.expressions.CallRule
-import builtin.rules.expressions.IdentifierRule
-import builtin.rules.expressions.IfRule
-import builtin.rules.expressions.IndexRule
-import builtin.rules.expressions.LiteralRule
-import builtin.rules.expressions.NumberOfRule
-import builtin.rules.expressions.RangeRule
-import builtin.rules.statements.AssignmentRule
-import builtin.rules.statements.ExpressionRule
-import builtin.rules.statements.ForRule
-import builtin.rules.statements.ReturnRule
-import builtin.rules.statements.WhileRule
+import builtin.rules.expressions.*
+import builtin.rules.statements.*
 
 object VuraParserHandler {
     fun register(lexer: Parser) {
@@ -46,7 +26,7 @@ object VuraParserHandler {
             EnumRule(it),
             ExtensionsRule(it),
             FunctionRule(it),
-            PropertyDeclRule(it),
+            PropertyRule(it),
             VariableRule(it),
 
             // The last choice as it would otherwise catch on any identifier
@@ -58,7 +38,7 @@ object VuraParserHandler {
             WhileRule(it),
             ReturnRule(it),
             VariableRule(it),
-            ExpressionRule(it),
+            ExpressionStatementRule(it),
 
             /* EXPRESSIONS */
             LiteralRule(it),

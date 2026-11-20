@@ -3,7 +3,7 @@ package builtin.rules.expressions
 import ExpressionNode
 import Parser
 import ParserReader
-import ParserRule
+import PostExpressionRule
 import builtin.helpers.parseBlock
 import builtin.helpers.parseIdentifier
 import builtin.nodes.Identifier
@@ -11,11 +11,9 @@ import builtin.nodes.expressions.CallExpression
 import builtin.tokentypes.SymbolTokenType
 import builtin.tokentypes.VuraTokenType
 
-class CallRule(override val parser: Parser): ParserRule() {
-    override fun tryExpression(reader: ParserReader): ExpressionNode? {
+class CallRule(override val parser: Parser): PostExpressionRule {
+    override fun tryExpression(reader: ParserReader, expression: ExpressionNode): ExpressionNode? {
         val start = reader.currentPos
-
-        val callee = parser.requestExpression(reader) ?: return null
 
         val generics: List<Identifier>? = if (reader.hope(SymbolTokenType.LessThan) != null) {
             val gen = mutableListOf<Identifier>()
@@ -40,6 +38,6 @@ class CallRule(override val parser: Parser): ParserRule() {
         val body = parseBlock(reader, parser)
 
 
-        return CallExpression(callee, generics, params, body, reader.range(start))
+        return CallExpression(expression, generics, params, body, reader.range(start))
     }
 }

@@ -1,7 +1,20 @@
-abstract class ParserRule {
-    protected abstract val parser: Parser
+interface ParserRule {
+    val parser: Parser
+}
 
-    open fun tryDeclaration(reader: ParserReader): DeclarationNode? = null
-    open fun tryStatement(reader: ParserReader): StatementNode? = null
-    open fun tryExpression(reader: ParserReader): ExpressionNode? = null
+
+interface DeclarationRule: ParserRule {
+    fun tryDeclaration(reader: ParserReader): DeclarationNode?
+}
+
+interface StatementRule: ParserRule {
+    fun tryStatement(reader: ParserReader): StatementNode?
+}
+
+interface PreExpressionRule: ParserRule {
+    fun tryExpression(reader: ParserReader): ExpressionNode?
+}
+
+interface PostExpressionRule: ParserRule {
+    fun tryExpression(reader: ParserReader, expression: ExpressionNode): ExpressionNode?
 }

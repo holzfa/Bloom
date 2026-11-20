@@ -1,20 +1,18 @@
 package builtin.rules.declarations
 
 import DeclarationNode
+import DeclarationRule
 import Parser
 import ParserReader
-import ParserRule
 import builtin.helpers.parseIdentifier
 import builtin.helpers.parseModifiers
 import builtin.helpers.parseType
 import builtin.helpers.parseVariableMod
 import builtin.nodes.Identifier
-import builtin.nodes.declarations.PropertyDeclaration
 import builtin.nodes.declarations.VariableDeclaration
-import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
 
-class VariableRule(override val parser: Parser): ParserRule() {
+class VariableRule(override val parser: Parser): DeclarationRule {
     override fun tryDeclaration(reader: ParserReader): DeclarationNode? {
         val start = reader.currentPos
         val mods = parseModifiers(reader)

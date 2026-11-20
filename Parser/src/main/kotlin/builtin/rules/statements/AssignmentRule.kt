@@ -2,12 +2,12 @@ package builtin.rules.statements
 
 import Parser
 import ParserReader
-import ParserRule
 import StatementNode
+import StatementRule
 import builtin.helpers.parseAssignmentMod
 import builtin.nodes.statements.AssignmentStatement
 
-class AssignmentRule(override val parser: Parser): ParserRule() {
+class AssignmentRule(override val parser: Parser): StatementRule {
     override fun tryStatement(reader: ParserReader): StatementNode? {
         val start = reader.currentPos
 

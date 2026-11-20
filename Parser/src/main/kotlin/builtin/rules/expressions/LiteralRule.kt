@@ -3,11 +3,11 @@ package builtin.rules.expressions
 import ExpressionNode
 import Parser
 import ParserReader
-import ParserRule
+import PreExpressionRule
 import builtin.nodes.expressions.LiteralExpression
 import builtin.tokentypes.LiteralTokenType
 
-class LiteralRule(override val parser: Parser): ParserRule() {
+class LiteralRule(override val parser: Parser): PreExpressionRule {
     override fun tryExpression(reader: ParserReader): ExpressionNode? {
         val start = reader.currentPos
 

@@ -2,14 +2,11 @@ package builtin.rules.statements
 
 import Parser
 import ParserReader
-import ParserRule
 import StatementNode
-import builtin.nodes.statements.AssignmentStatement
+import StatementRule
 import builtin.nodes.statements.ExpressionStatement
-import builtin.nodes.statements.ReturnStatement
-import builtin.tokentypes.KeywordTokenType
 
-class ExpressionRule(override val parser: Parser): ParserRule() {
+class ExpressionStatementRule(override val parser: Parser): StatementRule {
     override fun tryStatement(reader: ParserReader): StatementNode? {
         val start = reader.currentPos
 

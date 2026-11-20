@@ -1,5 +1,3 @@
-import kotlin.reflect.KClass
-
 class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, "Parser") {
         private val rules = mutableListOf<ParserRule>()
 
@@ -25,7 +23,7 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
 
         /** Requests a declaration node to be parsed and returns it if parsing was successful */
         fun requestDeclaration(reader: ParserReader): DeclarationNode? {
-            for (rule in rules) {
+            for (rule in rules.filterIsInstance<DeclarationRule>()) {
                 reader.mark()
                 val node = rule.tryDeclaration(reader)
                 if (node != null) {
@@ -39,7 +37,7 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
 
         /** Requests a statement node to be parsed and returns it if parsing was successful */
         fun requestStatement(reader: ParserReader): StatementNode? {
-            for (rule in rules) {
+            for (rule in rules.filterIsInstance<StatementRule>()) {
                 reader.mark()
                 val node = rule.tryStatement(reader)
                 if (node != null) {
@@ -53,32 +51,29 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
 
         /** Requests an expression node to be parsed and returns it if parsing was successful */
         fun requestExpression(reader: ParserReader): ExpressionNode? {
-            for (rule in rules) {
+            var pure: ExpressionNode? = null
+
+            for (rule in rules.filterIsInstance<PreExpressionRule>()) {
                 reader.mark()
                 val node = rule.tryExpression(reader)
                 if (node != null) {
-                    return node
+                    pure = node
+                    break
                 }
                 reader.reset()
             }
 
-            return null
-        }
-
-        /** Requests an expression node to be parsed and returns it if parsing was successful */
-        fun <TRule: ParserRule>requestExpression(reader: ParserReader, except: KClass<TRule>): ExpressionNode? {
-            for (rule in rules.filter { it::class != except }) {
-                reader.mark()
-                val node = rule.tryExpression(reader)
-                if (node != null) {
-                    return node
+            if (pure != null) {
+                for (rule in rules.filterIsInstance<PostExpressionRule>()) {
+                    reader.mark()
+                    val node = rule.tryExpression(reader, pure)
+                    if (node != null) return node
+                    reader.reset()
                 }
-                reader.reset()
             }
 
-            return null
+            return pure
         }
-
 
         /** Requests declaration nodes to be parsed until the condition is true *or* the reader has reached its end */
         fun requestDeclarationsUntil(reader: ParserReader, condition: (reader: ParserReader) -> Boolean): List<DeclarationNode> {

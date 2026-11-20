@@ -1,8 +1,8 @@
 package builtin.rules.declarations
 
+import DeclarationRule
 import Parser
 import ParserReader
-import ParserRule
 import builtin.helpers.parseIdentifier
 import builtin.nodes.Identifier
 import builtin.nodes.declarations.ImportDeclaration
@@ -10,7 +10,7 @@ import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
 import builtin.tokentypes.VuraTokenType
 
-internal class ImportRule(override val parser: Parser): ParserRule() {
+internal class ImportRule(override val parser: Parser): DeclarationRule {
     override fun tryDeclaration(reader: ParserReader): ImportDeclaration? {
         val startType = reader.peek().type
         if (startType != KeywordTokenType.Import && startType != KeywordTokenType.From) return null

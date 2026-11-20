@@ -3,12 +3,11 @@ package builtin.rules.expressions
 import ExpressionNode
 import Parser
 import ParserReader
-import ParserRule
-import builtin.helpers.parseAssignmentMod
+import PreExpressionRule
 import builtin.helpers.parseIdentifier
 import builtin.nodes.expressions.IdentifierExpression
 
-class IdentifierRule(override val parser: Parser): ParserRule() {
+class IdentifierRule(override val parser: Parser): PreExpressionRule {
     override fun tryExpression(reader: ParserReader): ExpressionNode? {
         val start = reader.currentPos
 

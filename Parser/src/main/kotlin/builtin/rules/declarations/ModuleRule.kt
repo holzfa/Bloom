@@ -1,15 +1,15 @@
 package builtin.rules.declarations
 
 import DeclarationNode
+import DeclarationRule
 import Parser
 import ParserReader
-import ParserRule
 import builtin.helpers.parseIdentifier
 import builtin.nodes.declarations.ModuleDeclaration
 import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
 
-internal class ModuleRule(override val parser: Parser): ParserRule() {
+internal class ModuleRule(override val parser: Parser): DeclarationRule {
     override fun tryDeclaration(reader: ParserReader): ModuleDeclaration? {
         val startType = reader.peek().type
         if (startType != KeywordTokenType.Module) return null

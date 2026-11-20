@@ -1,14 +1,10 @@
 package builtin.rules.declarations
 
 import DeclarationNode
+import DeclarationRule
 import Parser
 import ParserReader
-import ParserRule
-import builtin.helpers.parseBase
-import builtin.helpers.parseEnumMember
-import builtin.helpers.parseIdentifier
-import builtin.helpers.parseModifiers
-import builtin.helpers.parseParametersDeclaration
+import builtin.helpers.*
 import builtin.nodes.Identifier
 import builtin.nodes.declarations.EnumDeclaration
 import builtin.nodes.declarations.EnumMember
@@ -16,7 +12,7 @@ import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
 import builtin.tokentypes.VuraTokenType
 
-class EnumRule(override val parser: Parser): ParserRule() {
+class EnumRule(override val parser: Parser): DeclarationRule {
     override fun tryDeclaration(reader: ParserReader): DeclarationNode? {
         val start = reader.currentPos
         val mods = parseModifiers(reader)
