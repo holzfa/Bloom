@@ -2,10 +2,10 @@ package builtin.nodes.expressions
 
 import ExpressionNode
 import TextRange
-import builtin.tokentypes.LiteralTokenType
+import builtin.nodes.LiteralType
 
 data class LiteralExpression(
-    val type: LiteralTokenType,
+    val type: LiteralType,
     val textRepresentation: String,
     override val pos: TextRange
 ): ExpressionNode(pos)

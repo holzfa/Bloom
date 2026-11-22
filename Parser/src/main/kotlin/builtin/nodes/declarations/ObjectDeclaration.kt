@@ -12,4 +12,6 @@ data class ObjectDeclaration(
     val bases: List<ImplementationNode>?,
     val declarations: List<DeclarationNode>?,
     override val pos: TextRange
-): DeclarationNode(pos)
+): DeclarationNode(pos) {
+    override fun toString(): String = "object $name"
+}

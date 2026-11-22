@@ -8,4 +8,6 @@ data class ScalarType(
     val name: Identifier,
     override val isNullable: Boolean,
     override val pos: TextRange
-): TypeNode(isNullable, pos)
+): TypeNode(isNullable, pos) {
+    override fun toString(): String = "$name"
+}

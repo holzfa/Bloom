@@ -36,7 +36,7 @@ class PropertyRule(override val parser: Parser): DeclarationRule {
                 val accessorStart = reader.currentPos
 
                 if (reader.hope(it) != null) {
-                    val body = if (reader.hope(SymbolTokenType.Arrow) != null) parseBlock(reader, parser) else null
+                    val body = parseBlock(reader, parser)
 
                     PropertyAccessor(body, reader.range(accessorStart))
                 } else null

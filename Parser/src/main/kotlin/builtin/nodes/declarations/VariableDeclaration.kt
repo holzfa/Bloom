@@ -7,7 +7,6 @@ import TypeNode
 import builtin.nodes.Identifier
 import builtin.nodes.Modifier
 import builtin.nodes.VariableModifier
-import java.util.*
 
 data class VariableDeclaration(
     val modifiers: Set<Modifier>,
@@ -16,4 +15,7 @@ data class VariableDeclaration(
     val type: TypeNode?,
     val initializer: ExpressionNode?,
     override val pos: TextRange
-): DeclarationNode(pos)
+): DeclarationNode(pos) {
+    override fun toString(): String =
+        "$kind $name"
+}

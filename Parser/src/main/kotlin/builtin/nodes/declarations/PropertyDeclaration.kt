@@ -7,7 +7,6 @@ import TypeNode
 import builtin.nodes.Identifier
 import builtin.nodes.Modifier
 import builtin.nodes.PropertyAccessor
-import java.util.*
 
 data class PropertyDeclaration(
     val modifiers: Set<Modifier>,
@@ -17,4 +16,7 @@ data class PropertyDeclaration(
     val setter: PropertyAccessor?,
     val initializer: ExpressionNode?,
     override val pos: TextRange
-): DeclarationNode(pos)
+): DeclarationNode(pos) {
+    override fun toString(): String =
+        "prop $name" + if (type != null) ": $type" else ""
+}

@@ -10,4 +10,11 @@ data class EnumMember(
     val values: List<ExpressionNode>?,
     val initializer: ExpressionNode?,
     override val pos: TextRange
-): AstNode(pos)
+): AstNode(pos) {
+    override fun toString(): String =
+        "$name" + (if (!values.isNullOrEmpty())
+            "(${values.joinToString()})"
+        else "") + if (initializer != null)
+            " = $initializer"
+        else ""
+}

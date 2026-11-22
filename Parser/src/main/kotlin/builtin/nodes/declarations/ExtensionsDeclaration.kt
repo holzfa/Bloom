@@ -8,4 +8,7 @@ data class ExtensionsDeclaration(
     val targetType: TypeNode,
     val declarations: List<DeclarationNode>?,
     override val pos: TextRange
-): DeclarationNode(pos)
+): DeclarationNode(pos) {
+    override fun toString(): String =
+        "extensions $targetType"
+}

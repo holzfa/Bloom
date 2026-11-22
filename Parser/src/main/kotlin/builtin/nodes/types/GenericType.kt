@@ -9,4 +9,6 @@ data class GenericType(
     val genericTypes: List<TypeNode>,
     override val isNullable: Boolean,
     override val pos: TextRange
-): TypeNode(isNullable, pos)
+): TypeNode(isNullable, pos) {
+    override fun toString(): String = "$name<${genericTypes.joinToString()}>"
+}

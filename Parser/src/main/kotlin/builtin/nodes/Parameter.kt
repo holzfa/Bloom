@@ -9,4 +9,14 @@ data class Parameter(
     val name: Identifier,
     val type: TypeNode,
     override val pos: TextRange
-): AstNode(pos)
+): AstNode(pos) {
+    override fun toString(): String {
+        val result = StringBuilder()
+
+        if (kind != null) result.append("$kind ")
+        result.append(name)
+        result.append(": $type")
+
+        return result.toString()
+    }
+}

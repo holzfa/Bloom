@@ -4,7 +4,6 @@ import DeclarationNode
 import TextRange
 import TypeNode
 import builtin.nodes.*
-import java.util.*
 
 data class FunctionDeclaration(
     val modifiers: Set<Modifier>,
@@ -14,4 +13,9 @@ data class FunctionDeclaration(
     val returnType: TypeNode?,
     val body: Block?,
     override val pos: TextRange
-): DeclarationNode(pos)
+): DeclarationNode(pos) {
+    override fun toString(): String =
+        "fun $name" + (if (!generics.isNullOrEmpty())
+            "<${generics.joinToString()}>" else "") + if (parameters != null)
+            "(${parameters.joinToString()})" else ""
+}

@@ -5,5 +5,7 @@ enum class InstanceType {
     Class,
     Object,
     Enum,
-    Trait
+    Trait;
+
+    override fun toString(): String = this.name.lowercase()
 }

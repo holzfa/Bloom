@@ -5,8 +5,8 @@ from SuperTest import first, second, third
 
 class Container<T>(val name: String) : Printable {
     private prop items: Array<T> {
-        get -> it
-        set -> it = value
+        get = it
+        set = it = value
     }
 
     /*/ Creates a new Container instance /*/
@@ -64,8 +64,8 @@ struct Pair<A, B> {
 // Class with property accessors
 class Person(age: Int) {
     prop age: Int {
-        get -> it
-        set -> it = value
+        get = it
+        set = it = value
     }
 }
 
@@ -102,7 +102,7 @@ struct Optional<G>(val value: G?, val result: Result) {
         Optional<G>(null, Result.Failure)
     }
 
-    prop isDone: Bool { get() result is Result.Success }
+    prop isDone: Bool { get = result is Result.Success }
 }
 
 

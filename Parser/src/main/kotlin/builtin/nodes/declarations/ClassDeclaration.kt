@@ -2,11 +2,7 @@ package builtin.nodes.declarations
 
 import DeclarationNode
 import TextRange
-import builtin.nodes.GenericNode
-import builtin.nodes.Identifier
-import builtin.nodes.ImplementationNode
-import builtin.nodes.Modifier
-import builtin.nodes.Parameter
+import builtin.nodes.*
 
 data class ClassDeclaration(
     val modifiers: Set<Modifier>,
@@ -16,4 +12,9 @@ data class ClassDeclaration(
     val bases: List<ImplementationNode>?,
     val declarations: List<DeclarationNode>?,
     override val pos: TextRange
-): DeclarationNode(pos)
+): DeclarationNode(pos) {
+    override fun toString(): String =
+        "class $name" + if (!generics.isNullOrEmpty())
+            "<${generics.joinToString()}>"
+            else ""
+}

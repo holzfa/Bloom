@@ -13,4 +13,9 @@ data class ConstructorDeclaration(
     val parameters: List<Parameter>?,
     val body: Block?,
     override val pos: TextRange
-): DeclarationNode(pos)
+): DeclarationNode(pos) {
+    override fun toString(): String =
+        "constructor $name" + if (!parameters.isNullOrEmpty())
+            "(${parameters.joinToString()})"
+        else ""
+}

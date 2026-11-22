@@ -14,4 +14,9 @@ data class EnumDeclaration(
     val base: ImplementationNode?,
     val members: List<EnumMember>?,
     override val pos: TextRange
-): DeclarationNode(pos)
+): DeclarationNode(pos) {
+    override fun toString(): String =
+        "enum $name" + if (!parameters.isNullOrEmpty())
+            "(${parameters.joinToString()})"
+        else ""
+}
