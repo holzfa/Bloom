@@ -24,12 +24,12 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
         /** Requests a declaration node to be parsed and returns it if parsing was successful */
         fun requestDeclaration(reader: ParserReader): DeclarationNode? {
             for (rule in rules.filterIsInstance<DeclarationRule>()) {
-                reader.mark()
+                reader.save()
                 val node = rule.tryDeclaration(reader)
                 if (node != null) {
                     return node
                 }
-                reader.reset()
+                reader.rollBack()
             }
 
             return null
@@ -38,12 +38,12 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
         /** Requests a statement node to be parsed and returns it if parsing was successful */
         fun requestStatement(reader: ParserReader): StatementNode? {
             for (rule in rules.filterIsInstance<StatementRule>()) {
-                reader.mark()
+                reader.save()
                 val node = rule.tryStatement(reader)
                 if (node != null) {
                     return node
                 }
-                reader.reset()
+                reader.rollBack()
             }
 
             return null
@@ -54,21 +54,21 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
             var pure: ExpressionNode? = null
 
             for (rule in rules.filterIsInstance<PreExpressionRule>()) {
-                reader.mark()
+                reader.save()
                 val node = rule.tryExpression(reader)
                 if (node != null) {
                     pure = node
                     break
                 }
-                reader.reset()
+                reader.rollBack()
             }
 
             if (pure != null) {
                 for (rule in rules.filterIsInstance<PostExpressionRule>()) {
-                    reader.mark()
+                    reader.save()
                     val node = rule.tryExpression(reader, pure)
                     if (node != null) return node
-                    reader.reset()
+                    reader.rollBack()
                 }
             }
 

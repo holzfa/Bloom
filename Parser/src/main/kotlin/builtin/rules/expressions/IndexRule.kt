@@ -13,7 +13,7 @@ class IndexRule(override val parser: Parser): PostExpressionRule {
 
         reader.hope(SymbolTokenType.SquareOpen) ?: return null
         val index = parser.requestExpression(reader) ?: return null
-        reader.expect(SymbolTokenType.SquareOpen)
+        reader.expect(SymbolTokenType.SquareClose)
 
         return IndexExpression(expression, index, reader.range(start))
     }

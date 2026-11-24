@@ -1,26 +1,25 @@
 import java.io.Serializable
+import java.util.*
 
-class MessageBag: Rollback {
-    val messages: List<Message<Serializable>>
-        field: MutableList<Message<Serializable>> = mutableListOf()
+data class MessageBagState(val messages: MutableList<Message<Serializable>>): RollbackState
+
+class MessageBag: Rollback<MessageBagState> {
+    var state = MessageBagState(mutableListOf())
 
     val anyErrors
-        get() = messages.any { it.severity == Severity.Error }
+        get() = state.messages.any { it.severity == Severity.Error }
     val anyWarnings
-        get() = messages.any { it.severity == Severity.Warning }
+        get() = state.messages.any { it.severity == Severity.Warning }
 
     fun add(message: Message<Serializable>) {
-        messages.add(message)
+        state.messages.add(message)
     }
 
-
-    private val marked = mutableListOf<Message<Serializable>>()
-    override fun mark() {
-        marked.clear()
-        marked.addAll(messages)
+    override val states: Stack<MessageBagState> = Stack()
+    override fun save() {
+        states.add(state)
     }
-    override fun reset() {
-        messages.clear()
-        messages.addAll(marked)
+    override fun rollBack() {
+        state = states.pop()
     }
 }

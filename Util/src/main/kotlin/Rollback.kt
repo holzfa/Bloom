@@ -1,4 +1,10 @@
-interface Rollback {
-    fun mark()
-    fun reset()
+import java.util.*
+
+interface Rollback<TState: RollbackState> {
+    val states: Stack<TState>
+
+    fun save()
+    fun rollBack()
 }
+
+interface RollbackState

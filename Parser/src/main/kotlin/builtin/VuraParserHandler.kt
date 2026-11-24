@@ -46,8 +46,8 @@ object VuraParserHandler {
             IfRule(it),
             NumberOfRule(it),
             IndexRule(it),
-            CallRule(it),
             RangeRule(it),
+            CallRule(it),
             IdentifierRule(it),
         )
     }

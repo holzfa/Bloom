@@ -30,13 +30,14 @@ class CallRule(override val parser: Parser): PostExpressionRule {
             gen
         } else null
 
+        if (reader.hope(SymbolTokenType.ParenthesisOpen) == null) return null
         val params = parser.requestExpressionsUntil(reader) {
             reader.isNext(SymbolTokenType.Comma)
         }
         reader.hope(SymbolTokenType.Comma)
+        reader.expect(SymbolTokenType.ParenthesisClose)
 
-        val body = parseBlock(reader, parser)
-
+        val body = parseBlock(reader, parser, blockOnly = true)
 
         return CallExpression(expression, generics, params, body, reader.range(start))
     }

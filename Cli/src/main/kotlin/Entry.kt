@@ -23,7 +23,7 @@ fun main() {
         val ast = parser.parse(tokens, file)
         print(DebugAstPrinter.visit(ast))
     } catch (e: Exception) {
-        for (m in bag.messages) {
+        for (m in bag.state.messages) {
             println(m)
         }
         println("Error: ${e.message}")

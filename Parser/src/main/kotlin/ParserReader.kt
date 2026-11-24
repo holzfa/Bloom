@@ -1,11 +1,11 @@
 import builtin.tokentypes.SymbolTokenType
 import builtin.tokentypes.VuraTokenType
+import java.util.*
 
-class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag: MessageBag): MessageCollector<TextRange>(bag, "Parser"), Rollback {
-    var cursor = 0
-        private set
+data class ParserReaderState(var cursor: Int, var rawCursor: Int): RollbackState
 
-    private var rawCursor = 0
+class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag: MessageBag): MessageCollector<TextRange>(bag, "Parser"), Rollback<ParserReaderState> {
+    var state = ParserReaderState(0, 0)
 
     private val filteredTypes = listOf<TokenType>(
         VuraTokenType.Whitespace,
@@ -26,7 +26,7 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
 
     /** Creates a range from the specified start and the end of the current token */
     fun range(start: Vec2): TextRange {
-        return if (cursor > 0) {
+        return if (state.cursor > 0) {
             TextRange(start, peek(-1).pos.endVec, filePath)
         } else {
             TextRange(start, peek().pos.endVec, filePath)
@@ -39,29 +39,29 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
     }
 
     /** Checks if the next token is Eof or if are no more tokens left */
-    val isAtEnd: Boolean get() { return cursor >= tokens.size || isNext(DefaultTokenTypes.Eof) }
+    val isAtEnd: Boolean get() { return state.cursor >= tokens.size || isNext(DefaultTokenTypes.Eof) }
 
     /** Peeks to future tokens with the specified offset or 0 if unspecified */
     fun peek(offset: Int = 0): Token {
-        val idx = cursor + offset
+        val idx = state.cursor + offset
         return if (idx < tokens.size) tokens[idx] else tokens.lastOrNull() ?: Token.error
     }
     private fun peekRaw(offset: Int = 0): Token {
-        val idx = rawCursor + offset
+        val idx = state.rawCursor + offset
         return if (idx < rawTokens.size) rawTokens[idx] else rawTokens.lastOrNull() ?: Token.error
     }
 
     /** Returns the current token and *then* advances */
     fun advance(): Token {
         if (isAtEnd) return Token.error
-        val token = tokens[cursor++]
+        val token = tokens[state.cursor++]
 
-        // Sync the raw cursor
-        while (rawCursor < rawTokens.size && rawTokens[rawCursor] != token) {
-            rawCursor++
+        // Sync the raw state.cursor
+        while (state.rawCursor < rawTokens.size && rawTokens[state.rawCursor] != token) {
+            state.rawCursor++
         }
-        if (rawCursor < rawTokens.size) { // Consume the matched token as well
-            rawCursor++
+        if (state.rawCursor < rawTokens.size) { // Consume the matched token as well
+            state.rawCursor++
         }
 
         return token
@@ -129,21 +129,17 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
         }
     }
 
-
-    private var marked: Int = 0
-    private var rawMarked: Int = 0
-
+    override val states: Stack<ParserReaderState> = Stack()
     /** Creates a restore point that can be restored using ´reset´ */
-    override fun mark() {
-        marked = cursor
-        rawMarked = rawCursor
-        bag.mark()
+    override fun save() {
+        states.add(state)
+        bag.save()
     }
 
     /** Resets the restore point that was created using ´mark´ */
-    override fun reset() {
-        cursor = marked
-        rawCursor = rawMarked
-        bag.reset()
+    override fun rollBack() {
+        state = states.pop()
+        bag.rollBack()
     }
 }
+
