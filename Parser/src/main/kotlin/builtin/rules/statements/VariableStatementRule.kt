@@ -11,7 +11,7 @@ import builtin.nodes.Identifier
 import builtin.nodes.statements.VariableStatement
 import builtin.tokentypes.SymbolTokenType
 
-class VariableRule(override val parser: Parser): StatementRule {
+class VariableStatementRule(override val parser: Parser): StatementRule {
     override fun tryStatement(reader: ParserReader): StatementNode? {
         val start = reader.currentPos
         val kind = parseVariableMod(reader) ?: return null

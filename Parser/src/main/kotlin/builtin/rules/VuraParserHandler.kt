@@ -3,7 +3,6 @@ package builtin.rules
 import Parser
 import ParserRule
 import builtin.rules.declarations.*
-import builtin.rules.declarations.VariableRule
 import builtin.rules.expressions.*
 import builtin.rules.statements.*
 
@@ -27,17 +26,17 @@ object VuraParserHandler {
             ExtensionsRule(it),
             FunctionRule(it),
             PropertyRule(it),
-            VariableRule(it),
+            VariableDeclarartionRule(it),
 
             // The last choice as it would otherwise catch on any identifier
             ConstructorRule(it),
 
             /* STATEMENTS */
+            VariableStatementRule(it),
             AssignmentRule(it),
             ForRule(it),
             WhileRule(it),
             ReturnRule(it),
-            VariableRule(it),
             ExpressionStatementRule(it),
 
             /* EXPRESSIONS */

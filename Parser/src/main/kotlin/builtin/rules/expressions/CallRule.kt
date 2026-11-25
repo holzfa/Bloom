@@ -9,36 +9,41 @@ import builtin.helpers.parseIdentifier
 import builtin.nodes.Identifier
 import builtin.nodes.expressions.CallExpression
 import builtin.tokentypes.SymbolTokenType
-import builtin.tokentypes.VuraTokenType
 
 class CallRule(override val parser: Parser): PostExpressionRule {
     override fun tryExpression(reader: ParserReader, expression: ExpressionNode): ExpressionNode? {
-        val start = reader.currentPos
+        val start = expression.pos.start
 
-        val generics: List<Identifier>? = if (reader.hope(SymbolTokenType.LessThan) != null) {
-            val gen = mutableListOf<Identifier>()
-            
-            while (!reader.isAtEnd && reader.peek().type == VuraTokenType.Identifier) {
-                val ident = parseIdentifier(reader)
-                if (ident != null) gen.add(ident)
-                else break
-
-                if (reader.peek(1).type == VuraTokenType.Identifier) reader.expect(SymbolTokenType.Comma)
-                else reader.hope(SymbolTokenType.Comma)
-            }
-
-            gen
+        val generics = if (reader.isNext(SymbolTokenType.LessThan)) {
+            parseGenerics(reader) ?: return null
         } else null
 
-        if (reader.hope(SymbolTokenType.ParenthesisOpen) == null) return null
-        val params = parser.requestExpressionsUntil(reader) {
-            reader.isNext(SymbolTokenType.Comma)
+        val params = mutableListOf<ExpressionNode>()
+
+        reader.hope(SymbolTokenType.ParenthesisOpen) ?: return null
+        while (!reader.isAtEnd && !reader.isNext(SymbolTokenType.ParenthesisClose)) {
+            val param = parser.requestExpression(reader) ?: break
+            params.add(param)
+
+            if (reader.hope(SymbolTokenType.Comma) == null) break
         }
-        reader.hope(SymbolTokenType.Comma)
         reader.expect(SymbolTokenType.ParenthesisClose)
 
+        // Trailing lambda, only a braced block is allowed here
         val body = parseBlock(reader, parser, blockOnly = true)
 
         return CallExpression(expression, generics, params, body, reader.range(start))
+    }
+
+    private fun parseGenerics(reader: ParserReader): List<Identifier>? {
+        reader.hope(SymbolTokenType.LessThan) ?: return null
+
+        val generics = mutableListOf<Identifier>()
+        do {
+            generics.add(parseIdentifier(reader) ?: return null)
+        } while (reader.hope(SymbolTokenType.Comma) != null)
+
+        reader.hope(SymbolTokenType.GreaterThan) ?: return null
+        return generics
     }
 }

@@ -12,7 +12,7 @@ import builtin.nodes.Identifier
 import builtin.nodes.declarations.VariableDeclaration
 import builtin.tokentypes.SymbolTokenType
 
-class VariableRule(override val parser: Parser): DeclarationRule {
+class VariableDeclarartionRule(override val parser: Parser): DeclarationRule {
     override fun tryDeclaration(reader: ParserReader): DeclarationNode? {
         val start = reader.currentPos
         val mods = parseModifiers(reader)
