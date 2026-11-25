@@ -27,6 +27,7 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
                 reader.save()
                 val node = rule.tryDeclaration(reader)
                 if (node != null) {
+                    reader.commit()
                     return node
                 }
                 reader.rollBack()
@@ -41,6 +42,7 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
                 reader.save()
                 val node = rule.tryStatement(reader)
                 if (node != null) {
+                    reader.commit()
                     return node
                 }
                 reader.rollBack()
@@ -57,6 +59,7 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
                 reader.save()
                 val node = rule.tryExpression(reader)
                 if (node != null) {
+                    reader.commit()
                     pure = node
                     break
                 }
@@ -67,7 +70,10 @@ class Parser(bag: MessageBag = MessageBag()) : MessageCollector<TextRange>(bag, 
                 for (rule in rules.filterIsInstance<PostExpressionRule>()) {
                     reader.save()
                     val node = rule.tryExpression(reader, pure)
-                    if (node != null) return node
+                    if (node != null) {
+                        reader.commit()
+                        return node
+                    }
                     reader.rollBack()
                 }
             }

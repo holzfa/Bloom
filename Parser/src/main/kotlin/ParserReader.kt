@@ -130,16 +130,20 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
     }
 
     override val states: Stack<ParserReaderState> = Stack()
-    /** Creates a restore point that can be restored using ´reset´ */
+
     override fun save() {
-        states.add(state)
+        states.add(state.copy())
         bag.save()
     }
 
-    /** Resets the restore point that was created using ´mark´ */
     override fun rollBack() {
         state = states.pop()
         bag.rollBack()
+    }
+
+    override fun commit() {
+        states.pop()
+        bag.commit()
     }
 }
 
