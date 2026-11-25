@@ -5,7 +5,7 @@ import MessageBag
 import Parser
 import builtin.DebugAstPrinter
 import builtin.VuraLexerHandler
-import builtin.VuraParserHandler
+import builtin.rules.VuraParserHandler
 import java.io.File
 
 fun main() {

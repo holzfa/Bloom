@@ -1,4 +1,4 @@
-package builtin
+package builtin.rules
 
 import Parser
 import ParserRule
