@@ -11,7 +11,7 @@ class AssignmentRule(override val parser: Parser): StatementRule {
     override fun tryStatement(reader: ParserReader): StatementNode? {
         val start = reader.currentPos
 
-        val operand = parser.requestExpression(reader)
+        val operand = parser.requestExpression(reader) ?: return null
         val mod = parseAssignmentMod(reader) ?: return null
         val value = parser.requestExpression(reader)
 
