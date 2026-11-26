@@ -18,7 +18,7 @@ fun main() {
         val parser = Parser(bag)
         VuraParserHandler.register(parser)
 
-        val file = "/home/fabio/IdeaProjects/Bloom/Cli/src/main/kotlin/test.vu"
+        val file = "/home/fabio/IdeaProjects/Bloom/Cli/src/test.vu"
         val tokens = lexer.tokenize(File(file).readText())
         val ast = parser.parse(tokens, file)
         print(DebugAstPrinter.visit(ast))

@@ -3,7 +3,6 @@ package builtin.helpers
 import ParserReader
 import builtin.nodes.Modifier
 import builtin.tokentypes.KeywordTokenType
-import java.util.EnumSet
 
 fun parseModifier(reader: ParserReader): Modifier? {
     if (reader.hope(KeywordTokenType.Public) != null) return Modifier.Public

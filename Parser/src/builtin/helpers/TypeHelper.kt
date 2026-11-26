@@ -1,14 +1,11 @@
 package builtin.helpers
 
-import ErrorType
 import ParserReader
 import TypeNode
 import builtin.nodes.types.GenericType
 import builtin.nodes.types.LambdaType
 import builtin.nodes.types.ScalarType
 import builtin.tokentypes.SymbolTokenType
-import builtin.tokentypes.VuraTokenType
-import java.io.Reader
 
 fun parseType(reader: ParserReader): TypeNode? {
     return if (reader.peek().type == SymbolTokenType.ParenthesisOpen) {
