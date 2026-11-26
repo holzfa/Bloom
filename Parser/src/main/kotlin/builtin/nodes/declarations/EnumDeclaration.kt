@@ -13,6 +13,7 @@ data class EnumDeclaration(
     val parameters: List<Parameter>?,
     val base: ImplementationNode?,
     val members: List<EnumMember>?,
+    val declarations: List<DeclarationNode>?,
     override val pos: TextRange
 ): DeclarationNode(pos) {
     override fun toString(): String =

@@ -17,7 +17,7 @@ class TraitRule(override val parser: Parser): DeclarationRule {
 
         val name = parseIdentifier(reader) ?: Identifier.empty
         val generics = parseGenericDeclaration(reader)
-        val parameters = parseParametersDeclaration(reader)
+        val parameters = parseParameterList(reader)
         val bases = parseBases(reader, parser)
         val body = parseInstanceBody(reader, parser)
 

@@ -12,7 +12,7 @@ plugins {
 }
 
 rootProject.name = "Bloom"
-include("Lexer")
 include("Cli")
-include("Util")
+include("Lexer")
 include("Parser")
+include("Util")

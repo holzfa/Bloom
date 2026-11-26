@@ -21,7 +21,7 @@ class ForRule(override val parser: Parser): StatementRule {
         val collection = parser.requestExpression(reader)
         reader.expect(SymbolTokenType.ParenthesisClose)
 
-        val body = parseBlock(reader, parser, blockOnly = true)
+        val body = parseBlock(reader, parser, bracedOnly = true)
 
         return ForStatement(itemName, collection, body, reader.range(start))
     }

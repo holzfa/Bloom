@@ -31,6 +31,7 @@ enum class KeywordTokenType: TokenType {
     Enum,
     Extensions,
     Function,
+    Constructor,
 
     If,
     Else,
@@ -84,6 +85,7 @@ val keywords: Map<String, TokenType> = mapOf(
     Pair("enum", KeywordTokenType.Enum),
     Pair("extensions", KeywordTokenType.Extensions),
     Pair("fun", KeywordTokenType.Function),
+    Pair("constructor", KeywordTokenType.Constructor),
 
     Pair("if", KeywordTokenType.If),
     Pair("else", KeywordTokenType.Else),

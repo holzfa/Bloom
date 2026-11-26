@@ -12,21 +12,19 @@ class CommentRule(override val lexer: Lexer) : LexerRule {
     override fun tryMatch(reader: LexerReader): Token? {
         if (reader.peek() != '/') return null
 
-        val isMultiDoc = reader.peek(1) == '/' && reader.peek(2) == '*'
-        val isDoc = reader.peek(1) == '/' && reader.peek(2) == '/'
-        val isLine = reader.peek(1) == '/'
+        val isDoc = reader.peek(1) == '*' && reader.peek(2) == '/'
         val isMultiline = reader.peek(1) == '*'
 
         val start = reader.cursor
         val pos = Vec2(reader.line, reader.column)
 
-        val prefixLength = if (isMultiDoc || isDoc) 3 else 2
+        val prefixLength = if (isDoc) 3 else 2
         for (i in 1..prefixLength) reader.advance()
 
-        if (isMultiline || isMultiDoc) {
+        if (isMultiline || isDoc) {
             var closed = false
             while (!reader.isAtEnd) {
-                if (isMultiDoc && reader.peek() == '/' && reader.peek(1) == '*' && reader.peek(2) == '/') {
+                if (isDoc && reader.peek() == '/' && reader.peek(1) == '*' && reader.peek(2) == '/') {
                     for (i in 1..3) reader.advance()
                     closed = true
                     break
@@ -47,7 +45,7 @@ class CommentRule(override val lexer: Lexer) : LexerRule {
             while (!reader.isAtEnd && reader.peek() != '\n') reader.advance()
         }
 
-        val type = if (isDoc || isMultiDoc) VuraTokenType.Documentation
+        val type = if (isDoc) VuraTokenType.Documentation
         else VuraTokenType.Comment
 
         return Token(

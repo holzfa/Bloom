@@ -60,7 +60,7 @@ object DebugAstPrinter: AstVisitor<String>() {
             line(it, "${mods(it.modifiers)}fun ${it.name}${generics(it.generics)}${params(it.parameters)}$ret${blockNote(it.body?.statements?.size)}")
         }
         register<ConstructorDeclaration> {
-            line(it, "${mods(it.modifiers)}constructor ${it.name}${params(it.parameters)}${blockNote(it.body?.statements?.size)}")
+            line(it, "${mods(it.modifiers)}constructor${params(it.parameters)}${blockNote(it.body?.statements?.size)}")
         }
         register<PropertyDeclaration> {
             val type = it.type?.let { t -> ": $t" } ?: ""

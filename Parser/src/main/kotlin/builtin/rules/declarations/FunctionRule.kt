@@ -18,12 +18,13 @@ class FunctionRule(override val parser: Parser): DeclarationRule {
 
         val name = parseIdentifier(reader) ?: Identifier.empty
         val generics = parseGenericDeclaration(reader)
-        val parameters = parseParametersDeclaration(reader)
+        val extensionName = if (reader.hope(SymbolTokenType.Dot) != null) parseIdentifier(reader) else null
 
+        val parameters = parseParameterList(reader)
         val returnType = if (reader.hope(SymbolTokenType.Arrow) != null) parseType(reader) else null
 
         val body = parseBlock(reader, parser)
 
-        return FunctionDeclaration(mods, name, generics, parameters, returnType, body, reader.range(start))
+        return FunctionDeclaration(mods, name, generics, extensionName, parameters, returnType, body, reader.range(start))
     }
 }

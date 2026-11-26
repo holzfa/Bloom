@@ -47,6 +47,7 @@ enum class SymbolTokenType: TokenType {
 
     Cast /** :: */,
     Arrow /** -> */,
+    ExpressionBlock /** :> */ ,
     Range /** .. */,
     NumberOf /** # */,
 
@@ -92,8 +93,9 @@ val symbols: Map<String, TokenType> = mapOf(
 
     Pair("<<", SymbolTokenType.LeftShift),
 
-    Pair("->", SymbolTokenType.Arrow),
     Pair("::", SymbolTokenType.Cast),
+    Pair("->", SymbolTokenType.Arrow),
+    Pair(":>", SymbolTokenType.ExpressionBlock),
     Pair("..", SymbolTokenType.Range),
     Pair("#", SymbolTokenType.NumberOf),
 

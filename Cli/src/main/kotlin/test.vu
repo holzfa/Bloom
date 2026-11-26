@@ -1,31 +1,29 @@
-module Tests
+module Vura.Tests
 
-import Test
+import Vura.Test
 from SuperTest import first, second, third
 
-class Container<T>(val name: String) : Printable {
+class Container<T> : Serializable {
     private prop items: Array<T> {
-        get = it
-        set = it = value
+        get :> it
+        set :> it = value
     }
 
     /*/ Creates a new Container instance /*/
-    Container(initial: Array<T>) {
+    constructor(initial: Array<T>) {
         items = initial
     }
 
     /*/ Gets the first Item
      *  @Returns The first item of the container
     /*/
-    fun first() -> T {
-        items[0]
-    }
+    fun first() -> T :> items[0]
 
     // Generic method
     fun map<U>(mapper: (T) -> U) -> Array<U> {
-        val new: Array<U> = Array(items.length)
+        val new = Array<U>(items.length)
 
-        for (i in 0..#items) {
+        for (i in 0..items) {
             new[i] = mapper(items[i])
         }
 
@@ -33,14 +31,11 @@ class Container<T>(val name: String) : Printable {
     }
 }
 
-trait Printable<T> : Printable {
-    fun toString(): String
+trait Serializable<T> : Serializable {
+    fun toString() -> String
 }
 
-struct Vector2<T> : Printable {
-    var x: T
-    var y: T
-
+struct Vector2<T>(var x: T, var y: T) : Serializable {
     impl fun toString() -> String {
         "Vector"
     }
@@ -48,7 +43,7 @@ struct Vector2<T> : Printable {
 struct IVec2 : Vector2<Int>
 
 fun Container<Int>.Sum() -> Int {
-    var total: Int = 0b000
+    var total: Int = 0b001
     for (item in self.Items) {
         total += item
     }
@@ -56,17 +51,16 @@ fun Container<Int>.Sum() -> Int {
     total
 }
 
-struct Pair<A, B> {
-    val first: A
-    val second: B
-}
+struct Pair<A, B>(val first: A, val second: B)
 
 // Class with property accessors
 class Person(age: Int) {
     prop age: Int {
-        get = it
-        set = it = value
+        get :> it.clamp(120)
+        set // this is the same as: set { it = value }
     }
+
+    impl fun toString() -> String :> "Person aged ${person.age}"
 }
 
 // Virtual and sealed methods
@@ -87,10 +81,19 @@ class Dog : Animal {
 }
 
 // Enum
-enum Result {
-    Success,
-    Failure,
-    Pending
+enum Result(val code: Int?) [
+    Success(0),
+    Failure(1),
+    Pending(null)
+] {
+    prop hasFailed { get :> self == Result.Failure }
+
+    impl fun toString() -> String :> match (self) {
+        Success :> "Success"
+        Failure :> "Failed"
+        Pending :> "In progress"
+        else :> "Unknown"
+    }
 }
 
 struct Optional<G>(val value: G?, val result: Result) {
@@ -102,7 +105,7 @@ struct Optional<G>(val value: G?, val result: Result) {
         Optional<G>(null, Result.Failure)
     }
 
-    prop isDone: Bool { get = result is Result.Success }
+    prop isDone: Bool { get :> result is Result.Success }
 }
 
 
@@ -136,17 +139,7 @@ struct Complex(val real: Float, val imaginary: Float) {
 }
 
 
-fun processResult(result: Result) -> String {
-    match (result) {
-        Result.Success => "Success"
-        Result.Failure => "Failed"
-        Result.Pending => "In progress"
-        else => "Unknown"
-    }
-}
-
-
-fun filter<T>(items: Array<T>, predicate: (T) -> Bool) -> T[] {
+fun filter<T>(items: Array<T>, predicate: (T) -> Bool) -> Array<T> {
     val new = List<T>(items.length)
 
     for (i in items) {
@@ -179,12 +172,6 @@ fun factorial(num: Int) -> Int {
     return sum
 }
 
-
-fun formatPerson(person: Person) -> String {
-    return "Person aged ${person.age}"
-}
-
-
 fun calculate(a: Int, b: Int) -> Int {
     a + b
 }
@@ -197,26 +184,28 @@ fun calculate(a: Int) -> Int {
 fun main(args: Array<String>) -> Int {
     val vec: Vector2<Int> = Vector2<Int>()
 
-    val container: Container<Int> = Container<Int>([1, 2, 3, 4, 5])
+    val container = Container<Int>([1, 2, 3, 4, 5])
     val sum: Int = container.sum()
 
-    val isEven: Bool = 4.isEven()
-    val isOdd: Bool = 5.isOdd()
+    assert(4.isEven())
+    assert(!5.isOdd())
 
-    val c1: Complex = Complex(1.0, 2.0)
-    val c2: Complex = Complex(3.0, 4.0)
-    val c3: Complex = c1 + c2
+    val c1 = Complex(1.0, 2.0)
+    val c2 = Complex(3.0, 4.0)
+    val c3 = c1 + c2
 
-    val resultStatus: String = processResult(Result.Success)
+    val resultStatus = Result.Success.toString()
+    println(resultStatus)
 
-    val dog: Dog = Dog()
+    val dog = Dog()
     val sound: String = dog.speak()
+    print("The Dog ${sound}'s")
 
-    val person: Person = Person(25)
+    val person = Person(25)
     person.age = 30
-    val formatted: String = formatPerson(person)
+    val formatted = formatPerson(person)
 
-    val rangeSum: Int = sumRange(1, 10)
+    val rangeSum: Int = (1..10).sum()
 
     val calc1: Int = calculate(5, 3)
     val calc2: Int = calculate(5)

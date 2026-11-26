@@ -5,6 +5,7 @@ import Parser
 import ParserReader
 import PostExpressionRule
 import builtin.helpers.parseBlock
+import builtin.helpers.parseExpressionList
 import builtin.helpers.parseIdentifier
 import builtin.nodes.Identifier
 import builtin.nodes.expressions.CallExpression
@@ -18,21 +19,15 @@ class CallRule(override val parser: Parser): PostExpressionRule {
             parseGenerics(reader) ?: return null
         } else null
 
-        val params = mutableListOf<ExpressionNode>()
-
-        reader.hope(SymbolTokenType.ParenthesisOpen) ?: return null
-        while (!reader.isAtEnd && !reader.isNext(SymbolTokenType.ParenthesisClose)) {
-            val param = parser.requestExpression(reader) ?: break
-            params.add(param)
-
-            if (reader.hope(SymbolTokenType.Comma) == null) break
-        }
-        reader.expect(SymbolTokenType.ParenthesisClose)
+        val params = parseExpressionList(SymbolTokenType.ParenthesisOpen, SymbolTokenType.ParenthesisClose, reader, parser)
 
         // Trailing lambda, only a braced block is allowed here
-        val body = parseBlock(reader, parser, blockOnly = true)
+        val body = parseBlock(reader, parser, bracedOnly = true)
 
-        return CallExpression(expression, generics, params, body, reader.range(start))
+        // Only return if the function call uses either parameters/parentheses or a trailing block
+        return if (params != null || body != null) {
+            CallExpression(expression, generics, params, body, reader.range(start))
+        } else null
     }
 
     private fun parseGenerics(reader: ParserReader): List<Identifier>? {
