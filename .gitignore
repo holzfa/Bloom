@@ -1,8 +1,9 @@
-.gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+!**/src/**/build/
+
+### KOTLIN TOOLCHAIN ###
+kotlin
+kotlin.bat
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

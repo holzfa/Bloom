@@ -3,10 +3,10 @@ package builtin.nodes.expressions
 import ExpressionNode
 import TextRange
 import builtin.nodes.Block
-import builtin.nodes.Identifier
 
-data class IndexExpression(
-    val callee: ExpressionNode,
-    val index: ExpressionNode,
+data class IfExpression(
+    val condition: ExpressionNode?,
+    val thenBranch: Block?,
+    val elseBranch: Block?,
     override val pos: TextRange
 ): ExpressionNode(pos)

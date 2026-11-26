@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Cli" type="Amper.Run" nameIsGenerated="true">
+    <option name="command" value="run" />
+    <EXTENSION ID="amper.run.common">
+      <option name="module" value="Cli" />
+    </EXTENSION>
+    <method v="2" />
+  </configuration>
+</component>

@@ -4,7 +4,6 @@ import ExpressionNode
 import StatementNode
 import TextRange
 import builtin.nodes.Block
-import builtin.nodes.Identifier
 
 data class WhileStatement(
     val condition: ExpressionNode?,
