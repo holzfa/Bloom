@@ -11,10 +11,12 @@ interface StatementRule: ParserRule {
     fun tryStatement(reader: ParserReader): StatementNode?
 }
 
-interface PreExpressionRule: ParserRule {
+interface ExpressionRule: ParserRule
+
+interface PreExpressionRule: ExpressionRule {
     fun tryExpression(reader: ParserReader): ExpressionNode?
 }
 
-interface PostExpressionRule: ParserRule {
+interface PostExpressionRule: ExpressionRule {
     fun tryExpression(reader: ParserReader, expression: ExpressionNode): ExpressionNode?
 }

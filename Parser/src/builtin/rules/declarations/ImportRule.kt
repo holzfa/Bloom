@@ -4,6 +4,7 @@ import DeclarationRule
 import Parser
 import ParserReader
 import builtin.helpers.parseIdentifier
+import builtin.helpers.parseList
 import builtin.nodes.Identifier
 import builtin.nodes.declarations.ImportDeclaration
 import builtin.tokentypes.KeywordTokenType
@@ -31,21 +32,7 @@ internal class ImportRule(override val parser: Parser): DeclarationRule {
             val path = parseIdentifier(reader) ?: return null
 
             reader.expect(KeywordTokenType.Import) ?: return null
-
-            val selection = mutableListOf<Identifier>()
-            while (!reader.isAtEnd) {
-                val symbol = parseIdentifier(reader)
-                if (symbol != null) {
-                    selection.add(symbol)
-                    if (!reader.isTerminator() && reader.hasSequence(SymbolTokenType.Comma, VuraTokenType.Identifier)) {
-                        reader.expect(SymbolTokenType.Comma)
-                    }
-                } else {
-                    break
-                }
-            }
-            reader.hope(SymbolTokenType.Comma) // Consume trailing comma
-            reader.expectTerminator()
+            val selection = parseList(reader) { parseIdentifier(reader) }
 
             return ImportDeclaration(path, selection, reader.range(start))
         }

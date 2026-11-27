@@ -41,6 +41,7 @@ object VuraParserHandler {
             ExpressionStatementRule(it),
 
             /* EXPRESSIONS */
+            MemberAccessRule(it),
             LiteralRule(it),
             ReturnRule(it),
             IfRule(it),
@@ -50,6 +51,7 @@ object VuraParserHandler {
             RangeRule(it),
             CallRule(it),
             IdentifierRule(it),
+            BoxedRule(it)
         )
     }
 }

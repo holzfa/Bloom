@@ -7,8 +7,25 @@ import ParserReader
 import TokenType
 import builtin.nodes.Parameter
 import builtin.tokentypes.SymbolTokenType
+import builtin.tokentypes.VuraTokenType
 
 fun <TItem>parseList(
+    reader: ParserReader,
+    separator: TokenType = SymbolTokenType.Comma,
+    getItem: () -> TItem?
+): List<TItem> {
+    val elements = mutableListOf<TItem>()
+    while (!reader.isAtEnd) {
+        val param = getItem() ?: break
+        elements.add(param)
+
+        if (reader.hope(separator) == null) break
+    }
+
+    return elements
+}
+
+fun <TItem>parseContainedList(
     startType: TokenType,
     endType: TokenType,
     reader: ParserReader,
@@ -29,13 +46,13 @@ fun <TItem>parseList(
 }
 
 fun parseExpressionList(startType: TokenType, endType: TokenType, reader: ParserReader, parser: Parser): List<ExpressionNode>? {
-    return parseList(startType, endType, reader) {
+    return parseContainedList(startType, endType, reader) {
         parser.requestExpression(reader)
     }
 }
 
 fun parseParameterList(reader: ParserReader): List<Parameter>? {
-    return parseList(SymbolTokenType.ParenthesisOpen, SymbolTokenType.ParenthesisClose, reader) {
+    return parseContainedList(SymbolTokenType.ParenthesisOpen, SymbolTokenType.ParenthesisClose, reader) {
         parseParameterDeclaration(reader)
     }
 }

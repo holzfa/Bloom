@@ -26,7 +26,7 @@ object IslandsDark {
     val declarationTint = Color(0xFF3574F0)
     val statementTint = Color(0xFF6AAB73)
     val expressionTint = Color(0xFFE5B95C)
-    val typeTint = Color(0xFFC77DBB)
+    val typeTint = Color(0xFF887DBB)
     val otherTint = Color(0xFF8A8F98)
 
     val errorBackground = Color(0x80F75464)

@@ -43,8 +43,8 @@ struct Vector2<T>(var x: T, var y: T) : Serializable {
 struct IVec2 : Vector2<Int>
 
 fun Container<Int>.Sum() -> Int {
-    var total: Int = 0b001
-    for (item in self.Items) {
+    var total = 0
+    for (item in self.items) {
         total += item
     }
 

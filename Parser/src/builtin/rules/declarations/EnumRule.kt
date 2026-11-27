@@ -22,7 +22,7 @@ class EnumRule(override val parser: Parser): DeclarationRule {
         val base = if (reader.hope(SymbolTokenType.Colon) != null) parseBase(reader, parser)
                    else null
 
-        val members = parseList(SymbolTokenType.SquareOpen, SymbolTokenType.SquareClose, reader) {
+        val members = parseContainedList(SymbolTokenType.SquareOpen, SymbolTokenType.SquareClose, reader) {
             parseEnumMember(reader, parser)
         }
         val declarations = parseInstanceBody(reader, parser)
