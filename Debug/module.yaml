@@ -1,0 +1,14 @@
+product: jvm/app
+dependencies:
+  - //Lexer
+  - //Parser
+  - //Util
+  - $compose.desktop.currentOs
+  - $compose.material3
+  - "io.github.vinceglb:filekit-dialogs-compose:0.17.1"
+
+settings:
+  compose: enabled
+  jvm:
+    jdk:
+      version: 25

@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug" type="Amper.Run">
+    <option name="command" value="run" />
+    <EXTENSION ID="amper.run.common">
+      <option name="module" value="Debug" />
+    </EXTENSION>
+    <EXTENSION ID="amper.run.jvm">
+      <option name="jvmArgs" enabled="true" value="--enable-native-access=ALL-UNNAMED" />
+    </EXTENSION>
+    <method v="2" />
+  </configuration>
+</component>

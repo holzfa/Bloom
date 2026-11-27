@@ -17,7 +17,7 @@ class MessageBag: Rollback<MessageBagState> {
 
     override val states: Stack<MessageBagState> = Stack()
     override fun save() {
-        states.add(state.copy())
+        states.add(MessageBagState(state.messages.toMutableList()))
     }
     override fun rollBack() {
         state = states.pop()
