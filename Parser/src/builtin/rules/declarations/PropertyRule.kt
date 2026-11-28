@@ -5,7 +5,9 @@ import DeclarationRule
 import Parser
 import ParserReader
 import TokenType
+import builtin.helpers.isOperator
 import builtin.helpers.parseBlock
+import builtin.helpers.parseDeclarationName
 import builtin.helpers.parseIdentifier
 import builtin.helpers.parseModifiers
 import builtin.helpers.parseType
@@ -21,7 +23,7 @@ class PropertyRule(override val parser: Parser): DeclarationRule {
         val mods = parseModifiers(reader)
         reader.hope(KeywordTokenType.Property) ?: return null
 
-        val name = parseIdentifier(reader) ?: Identifier.empty
+        val name = parseDeclarationName(reader)
         val type = if (reader.hope(SymbolTokenType.Colon) != null) parseType(reader) else null
 
         val accessors = parseAccessors(reader)

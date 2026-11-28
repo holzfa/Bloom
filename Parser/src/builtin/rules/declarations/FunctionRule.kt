@@ -16,7 +16,7 @@ class FunctionRule(override val parser: Parser): DeclarationRule {
         val mods = parseModifiers(reader)
         reader.hope(KeywordTokenType.Function) ?: return null
 
-        val name = parseIdentifier(reader) ?: Identifier.empty
+        val name = parseDeclarationName(reader)
         val generics = parseGenericDeclaration(reader)
         val extensionName = if (reader.hope(SymbolTokenType.Dot) != null) parseIdentifier(reader) else null
 

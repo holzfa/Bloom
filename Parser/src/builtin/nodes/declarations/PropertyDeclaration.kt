@@ -4,13 +4,14 @@ import DeclarationNode
 import ExpressionNode
 import TextRange
 import TypeNode
+import builtin.nodes.DeclarationName
 import builtin.nodes.Identifier
 import builtin.nodes.Modifier
 import builtin.nodes.PropertyAccessor
 
 data class PropertyDeclaration(
     val modifiers: Set<Modifier>,
-    val name: Identifier,
+    val name: DeclarationName?,
     val type: TypeNode?,
     val getter: PropertyAccessor?,
     val setter: PropertyAccessor?,
