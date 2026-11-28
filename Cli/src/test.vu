@@ -37,7 +37,7 @@ trait Serializable<T> : Serializable {
 
 struct Vector2<T>(var x: T, var y: T) : Serializable {
     impl fun toString() -> String {
-        "Vector"
+        "Vector(x=${x}, y=${y})"
     }
 }
 struct IVec2 : Vector2<Int>
