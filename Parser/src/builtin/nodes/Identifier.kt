@@ -1,10 +1,9 @@
 package builtin.nodes
 
-data class Identifier(val parts: List<String>) {
-    override fun toString(): String {
-        return parts.joinToString(separator = ".")
-    }
+data class Identifier(val value: String) {
+    override fun toString(): String = value
+
     companion object {
-        val empty = Identifier(listOf())
+        val empty = Identifier("")
     }
 }

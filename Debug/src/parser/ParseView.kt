@@ -1,4 +1,4 @@
-package io.holzfa.bloom.debug
+package io.holzfa.bloom.debug.parser
 
 import AstNode
 import DeclarationNode
@@ -14,6 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import io.holzfa.bloom.debug.IslandsDark
+import io.holzfa.bloom.debug.NodeInfo
+import io.holzfa.bloom.debug.NodeInspector
+import io.holzfa.bloom.debug.ParseResult
+import io.holzfa.bloom.debug.lineStartsOf
+import io.holzfa.bloom.debug.offsetOf
 import java.io.Serializable
 
 class NodeEntry(
@@ -25,7 +31,7 @@ class NodeEntry(
     val parent: NodeEntry?
 ) {
     val name: String get() = node::class.simpleName ?: "Node"
-    val isValid: Boolean get() = start >= 0 && end > start
+    val isValid: Boolean get() = start in 0..<end
 
     /** From the outermost node down to this one */
     val chain: List<NodeEntry> get() = generateSequence(this) { it.parent }.toList().reversed()
@@ -64,19 +70,14 @@ class ParseView(result: ParseResult) {
 
     fun messagesAt(offset: Int): List<MessageRegion> = messages.filter { offset >= it.start && offset < it.end }
 
-    /** Node tints first (outer to inner), then the hovered node, errors last so they win over everything */
-    fun overlay(base: AnnotatedString, hovered: NodeEntry?): AnnotatedString = buildAnnotatedString {
+    /** Node tints (outer to inner), errors last so they win over everything. The hovered node is drawn by the editor */
+    fun overlay(base: AnnotatedString): AnnotatedString = buildAnnotatedString {
         append(base)
 
         for (entry in entries) {
             if (!entry.isValid) continue
             val color = categoryColor(entry.node).copy(alpha = 0.14f + 0.06f * (entry.depth % 3))
             addStyle(SpanStyle(background = color), entry.start, minOf(entry.end, base.length))
-        }
-
-        if (hovered != null && hovered.isValid) {
-            val color = categoryColor(hovered.node).copy(alpha = 0.55f)
-            addStyle(SpanStyle(background = color), hovered.start, minOf(hovered.end, base.length))
         }
 
         for (region in messages) {
@@ -86,7 +87,7 @@ class ParseView(result: ParseResult) {
     }
 }
 
-private fun categoryColor(node: AstNode): Color = when (node) {
+internal fun categoryColor(node: AstNode): Color = when (node) {
     is DeclarationNode -> IslandsDark.declarationTint
     is StatementNode -> IslandsDark.statementTint
     is ExpressionNode -> IslandsDark.expressionTint

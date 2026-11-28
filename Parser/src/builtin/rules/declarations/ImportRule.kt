@@ -5,6 +5,7 @@ import Parser
 import ParserReader
 import builtin.helpers.parseIdentifier
 import builtin.helpers.parseList
+import builtin.helpers.parsePath
 import builtin.nodes.Identifier
 import builtin.nodes.declarations.ImportDeclaration
 import builtin.tokentypes.KeywordTokenType
@@ -20,7 +21,7 @@ internal class ImportRule(override val parser: Parser): DeclarationRule {
         reader.advance()
 
         if (startType == KeywordTokenType.Import) {
-            val path = parseIdentifier(reader)
+            val path = parsePath(reader)
             reader.expectTerminator()
 
             return if (path != null) {
@@ -29,7 +30,7 @@ internal class ImportRule(override val parser: Parser): DeclarationRule {
                 null
             }
         } else {
-            val path = parseIdentifier(reader) ?: return null
+            val path = parsePath(reader) ?: return null
 
             reader.expect(KeywordTokenType.Import) ?: return null
             val selection = parseList(reader) { parseIdentifier(reader) }

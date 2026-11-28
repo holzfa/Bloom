@@ -13,7 +13,7 @@ fun <TItem>parseList(
     reader: ParserReader,
     separator: TokenType = SymbolTokenType.Comma,
     getItem: () -> TItem?
-): List<TItem> {
+): List<TItem>? {
     val elements = mutableListOf<TItem>()
     while (!reader.isAtEnd) {
         val param = getItem() ?: break

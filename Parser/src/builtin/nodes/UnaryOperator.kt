@@ -6,7 +6,7 @@ enum class UnaryOperator {
     Multiply /** * */,
     Divide /** / */,
     Modulo /** % */,
-
+    NumberOf /** # */,
     LessThan /** < */,
     GreaterThan /** > */,
     LogicalNot /** ! */,

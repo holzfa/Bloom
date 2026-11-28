@@ -144,6 +144,7 @@ object NodeInspector : AstVisitor<NodeInfo>() {
                 nodes("declarations", it.declarations)
             }
         }
+        register<ComplementObjectDeclaration> { info { nodes("declarations", it.declarations) } }
         register<ExtensionsDeclaration> {
             info {
                 node("targetType", it.targetType)
@@ -234,6 +235,7 @@ object NodeInspector : AstVisitor<NodeInfo>() {
             }
         }
 
+        register<ArrayLiteralExpression> { info { nodes("elements", it.elements) } }
         register<CallExpression> {
             info {
                 node("callee", it.callee)
@@ -262,7 +264,26 @@ object NodeInspector : AstVisitor<NodeInfo>() {
                 value("text", it.textRepresentation)
             }
         }
-        register<NumberOfExpression> { info { node("callee", it.callee) } }
+        register<MatchExpression> {
+            info {
+                node("target", it.target)
+                nodes("members", it.members)
+                node("default", it.default)
+            }
+        }
+        register<MatchMember> {
+            info {
+                node("pattern", it.pattern)
+                node("body", it.body)
+            }
+        }
+        register<MemberAccessExpression> {
+            info {
+                node("parent", it.parent)
+                node("child", it.child)
+            }
+        }
+        register<UnaryExpression> { info { value("operator", it.operator) } }
         register<RangeExpression> {
             info {
                 node("from", it.from)

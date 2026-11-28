@@ -31,11 +31,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -51,6 +53,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.holzfa.bloom.debug.parser.categoryColor
 import kotlin.math.roundToInt
 
 internal val LineHeight = 20.sp
@@ -91,9 +94,9 @@ fun CodeEditor(editor: EditorState) {
     val hidden = remember(analysis, editor.folded) { hiddenRanges(analysis.regions, editor.folded) }
     val gutter = remember(analysis, hidden, editor.folded) { gutterLines(analysis, hidden, editor.folded) }
 
-    val hoveredEntry = hover.entry
-    val displayed = remember(analysis, view, hoveredEntry) {
-        view?.overlay(analysis.highlighted, hoveredEntry) ?: analysis.highlighted
+    // The hovered node is not part of the text transformation, a new transformation re-lays out the field and disturbs the scroll
+    val displayed = remember(analysis, view) {
+        view?.overlay(analysis.highlighted) ?: analysis.highlighted
     }
     val transformed = remember(displayed, hidden) { foldedText(displayed, hidden) }
     val transformation = remember(analysis, transformed) {
@@ -149,7 +152,26 @@ fun CodeEditor(editor: EditorState) {
 
                     // The horizontal scroll gives the field unbounded width, so lines are never wrapped
                     Box(Modifier.horizontalScroll(horizontalScroll)) {
-                        Box {
+                        // The hover state is read while drawing, so a hover change only redraws and never recomposes
+                        Box(
+                            Modifier.drawBehind {
+                                val entry = hover.entry ?: return@drawBehind
+                                val layout = layoutHolder[0] ?: return@drawBehind
+                                if (!entry.isValid) return@drawBehind
+
+                                val length = layout.layoutInput.text.length
+                                val start = transformed.offsetMapping.originalToTransformed(entry.start).coerceIn(0, length)
+                                val end = transformed.offsetMapping.originalToTransformed(entry.end).coerceIn(0, length)
+                                if (start >= end) return@drawBehind
+
+                                translate(paddingX, paddingY) {
+                                    drawPath(
+                                        layout.getPathForRange(start, end),
+                                        categoryColor(entry.node).copy(alpha = 0.55f)
+                                    )
+                                }
+                            }
+                        ) {
                             BasicTextField(
                                 value = value,
                                 onValueChange = editor::edit,

@@ -4,13 +4,14 @@ import ExpressionNode
 import Parser
 import ParserReader
 import PostExpressionRule
+import PreExpressionRule
 import builtin.helpers.parseExpressionList
 import builtin.nodes.expressions.ArrayLiteralExpression
 import builtin.tokentypes.SymbolTokenType
 
-class ArrayLiteralRule(override val parser: Parser): PostExpressionRule {
-    override fun tryExpression(reader: ParserReader, expression: ExpressionNode): ExpressionNode? {
-        val start = expression.pos.start
+class ArrayLiteralRule(override val parser: Parser): PreExpressionRule {
+    override fun tryExpression(reader: ParserReader): ExpressionNode? {
+        val start = reader.currentPos
 
         val elements = parseExpressionList(SymbolTokenType.SquareOpen, SymbolTokenType.SquareClose, reader, parser) ?: return null
 

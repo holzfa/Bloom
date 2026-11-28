@@ -27,6 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
+import io.holzfa.bloom.debug.parser.MessageRegion
+import io.holzfa.bloom.debug.parser.NodeEntry
+import io.holzfa.bloom.debug.parser.ParseView
 
 private val TooltipStyle = CodeStyle.copy(fontSize = 12.sp, lineHeight = 16.sp)
 private const val MaxValueLength = 240

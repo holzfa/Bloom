@@ -2,10 +2,12 @@ package builtin.helpers
 
 import ParserReader
 import builtin.nodes.BinaryOperator
+import builtin.nodes.UnaryOperator
 import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
+import kotlin.time.measureTime
 
-fun parseBinaryOp(reader: ParserReader): BinaryOperator? {
+fun parseBinaryOperator(reader: ParserReader): BinaryOperator? {
     val tokenType = reader.peek().type
 
     val result = when (tokenType) {
@@ -31,6 +33,28 @@ fun parseBinaryOp(reader: ParserReader): BinaryOperator? {
         SymbolTokenType.BitwiseOr       -> BinaryOperator.BitwiseOr
         SymbolTokenType.BitwiseXor      -> BinaryOperator.BitwiseXor
         KeywordTokenType.Is             -> BinaryOperator.Is
+        else -> null
+    }
+    if (result != null) reader.advance()
+    return result
+}
+
+fun parseUnaryOperator(reader: ParserReader): UnaryOperator? {
+    val tokenType = reader.peek().type
+
+    val result = when (tokenType) {
+        SymbolTokenType.Add -> UnaryOperator.Plus
+        SymbolTokenType.Subtract -> UnaryOperator.Minus
+        SymbolTokenType.Multiply -> UnaryOperator.Multiply
+        SymbolTokenType.Divide -> UnaryOperator.Divide
+        SymbolTokenType.Modulo -> UnaryOperator.Modulo
+        SymbolTokenType.NumberOf -> UnaryOperator.NumberOf
+        SymbolTokenType.LessThan -> UnaryOperator.LessThan
+        SymbolTokenType.GreaterThan -> UnaryOperator.GreaterThan
+        SymbolTokenType.LogicalNot -> UnaryOperator.LogicalNot
+        SymbolTokenType.BitwiseAnd -> UnaryOperator.BitwiseAnd
+        SymbolTokenType.BitwiseOr -> UnaryOperator.BitwiseOr
+        SymbolTokenType.BitwiseXor -> UnaryOperator.BitwiseXor
         else -> null
     }
     if (result != null) reader.advance()

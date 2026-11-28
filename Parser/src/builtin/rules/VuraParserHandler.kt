@@ -2,6 +2,7 @@ package builtin.rules
 
 import Parser
 import ParserRule
+import builtin.helpers.parseBinaryOperator
 import builtin.rules.declarations.*
 import builtin.rules.expressions.*
 import builtin.rules.statements.*
@@ -46,11 +47,14 @@ object VuraParserHandler {
             ReturnRule(it),
             IfRule(it),
             MatchRule(it),
-            NumberOfRule(it),
+            PostfixUnaryRule(it),
             ArrayLiteralRule(it),
             IndexRule(it),
             RangeRule(it),
             CallRule(it),
+            BinaryRule(it),
+            UnaryRule(it),
+            PostfixUnaryRule(it),
             IdentifierRule(it),
             BoxedRule(it)
         )

@@ -1,6 +1,5 @@
 package builtin.helpers
 
-import Parser
 import ParserReader
 import builtin.nodes.DeclarationName
 import builtin.nodes.ExtensionName
@@ -26,7 +25,7 @@ fun parseDeclarationName(reader: ParserReader, allowExtension: Boolean = true): 
 
     if (reader.peek().type is SymbolTokenType) {
         // Operator
-        val op = parseBinaryOp(reader) ?: return null
+        val op = parseBinaryOperator(reader) ?: return null
         return OperatorName(op, reader.range(start))
     }
 

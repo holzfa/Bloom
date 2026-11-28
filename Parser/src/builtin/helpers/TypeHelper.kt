@@ -18,13 +18,10 @@ private fun parseScalarOrGeneric(reader: ParserReader): TypeNode? {
     val start = reader.currentPos
     val name = parseIdentifier(reader) ?: return null
 
-    if (reader.hope(SymbolTokenType.LessThan) != null) {
-        val generics = mutableListOf<TypeNode>()
-
-        while (!reader.isAtEnd && reader.hope(SymbolTokenType.GreaterThan) == null) {
-            val type = parseType(reader) ?: break
-            generics.add(type)
-        }
+    if (reader.isNext(SymbolTokenType.LessThan)) {
+        val generics = parseContainedList(SymbolTokenType.LessThan, SymbolTokenType.GreaterThan, reader) {
+            parseType(reader)
+        } ?: return null
 
         val isNullable = reader.hope(SymbolTokenType.Nullable) != null
         return GenericType(name, generics, isNullable, reader.range(start))

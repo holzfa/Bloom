@@ -46,6 +46,9 @@ object DebugAstPrinter: AstVisitor<String>() {
                 it.declarations
             )
         }
+        register<ComplementObjectDeclaration> {
+            tree(line(it, "complement object${bodyNote(it.declarations)}"), it.declarations)
+        }
         register<ExtensionsDeclaration> {
             tree(line(it, "extensions ${it.targetType}${bodyNote(it.declarations)}"), it.declarations)
         }

@@ -4,16 +4,16 @@ import ExpressionNode
 import Parser
 import ParserReader
 import PreExpressionRule
-import builtin.nodes.expressions.NumberOfExpression
-import builtin.tokentypes.SymbolTokenType
+import builtin.helpers.parseUnaryOperator
+import builtin.nodes.expressions.UnaryExpression
 
-class NumberOfRule(override val parser: Parser): PreExpressionRule {
+class PostfixUnaryRule(override val parser: Parser): PreExpressionRule {
     override fun tryExpression(reader: ParserReader): ExpressionNode? {
         val start = reader.currentPos
 
-        reader.hope(SymbolTokenType.NumberOf) ?: return null
+        val op = parseUnaryOperator(reader) ?: return null
         val expression = parser.requestExpression(reader) ?: return null
 
-        return NumberOfExpression(expression, reader.range(start))
+        return UnaryExpression(expression, op, false, reader.range(start))
     }
 }

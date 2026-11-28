@@ -5,6 +5,7 @@ import DeclarationRule
 import Parser
 import ParserReader
 import builtin.helpers.parseIdentifier
+import builtin.helpers.parsePath
 import builtin.nodes.declarations.ModuleDeclaration
 import builtin.tokentypes.KeywordTokenType
 import builtin.tokentypes.SymbolTokenType
@@ -17,7 +18,7 @@ internal class ModuleRule(override val parser: Parser): DeclarationRule {
         val start = reader.currentPos
         reader.advance()
 
-        val path = parseIdentifier(reader) ?: return null
+        val path = parsePath(reader) ?: return null
 
         val declarations = mutableListOf<DeclarationNode>()
         if (!reader.isNext(SymbolTokenType.BraceOpen)) {
