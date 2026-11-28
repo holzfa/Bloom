@@ -106,8 +106,7 @@ class ParserReader(private val rawTokens: List<Token>, val filePath: String, bag
         }; return true
     }
 
-    /** Checks if the next token is of the given type */
-    fun isNext(type: TokenType, offset: Int = 0): Boolean = peek(offset).type == type
+    /** Checks if the next token is any of the given types */
     fun isNext(vararg types: TokenType): Boolean = types.contains(peek().type)
 
     /** Checks if the next token is a statement terminator('\n', ';') */

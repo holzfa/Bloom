@@ -42,13 +42,17 @@ struct Vector2<T>(var x: T, var y: T) : Serializable {
 }
 struct IVec2 : Vector2<Int>
 
-fun Container<Int>.Sum() -> Int {
+fun Container<Int>.sum() -> Int {
     var total = 0
     for (item in self.items) {
         total += item
     }
 
     total
+}
+
+prop Container<Int>.total: Int {
+    get :> it.sum()
 }
 
 struct Pair<A, B>(val first: A, val second: B)

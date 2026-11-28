@@ -36,15 +36,15 @@ enum class SymbolTokenType: TokenType {
     Assign /** = */,
 
     LessThan /** < */,
-    GreaterThan /** > */,
+    GreaterThan /** `> */,
     LogicalNot /** ! */,
     BitwiseAnd /** & */,
     BitwiseOr /** | */,
     BitwiseXor /** ^ */,
+
     Tilde /** ~ */,
     Nullable /** ? */,
     At /** @ */,
-
     Cast /** :: */,
     Arrow /** -> */,
     ExpressionBlock /** :> */ ,

@@ -7,9 +7,8 @@ import builtin.nodes.*
 
 data class FunctionDeclaration(
     val modifiers: Set<Modifier>,
-    val name: Identifier,
+    val name: DeclarationName?,
     val generics: List<GenericNode>?,
-    val extensionName: Identifier?,
     val parameters: List<Parameter>?,
     val returnType: TypeNode?,
     val body: Block?,
